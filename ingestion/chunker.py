@@ -31,6 +31,8 @@ class TextChunk:
         chunk_index: int,
         content: str,
         token_count: int,
+        applies_to: str = "",
+        document_date: str = "",
     ):
         self.chunk_id = chunk_id
         self.doc_id = doc_id
@@ -39,6 +41,8 @@ class TextChunk:
         self.chunk_index = chunk_index
         self.content = content
         self.token_count = token_count
+        self.applies_to = applies_to
+        self.document_date = document_date
 
     def to_dict(self) -> Dict:
         return {
@@ -50,6 +54,8 @@ class TextChunk:
             "content": self.content,
             "token_count": self.token_count,
             "char_count": len(self.content),
+            "applies_to": self.applies_to,
+            "document_date": self.document_date,
         }
 
 
@@ -110,6 +116,8 @@ class DocumentChunker:
                             chunk_index=chunk_idx,
                             content=content,
                             token_count=estimate_tokens(content),
+                            applies_to=page_data.applies_to,
+                            document_date=page_data.document_date,
                         )
                     )
                     chunk_idx += 1
@@ -145,6 +153,8 @@ class DocumentChunker:
                         chunk_index=chunk_idx,
                         content=content,
                         token_count=estimate_tokens(content),
+                        applies_to=page_data.applies_to,
+                        document_date=page_data.document_date,
                     )
                 )
 

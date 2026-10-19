@@ -80,3 +80,36 @@ Multi-Agent Orchestrator (Google ADK)
   - *Boundary-aware chunking*: Fixed character slicing (e.g. every 1000 characters) cuts numbers, formulas, and sentences in half, causing semantic distortion in vector embeddings. Respecting paragraph and sentence boundaries keeps rules intact.
   - *Sliding-window overlap*: A 50-token overlap guarantees that if a rule spans across chunk boundaries (e.g. a condition stated in one sentence and the penalty in the next), both chunks retain sufficient semantic context for vector similarity matching.
 
+### Phase 2: Dense Embeddings, ChromaDB & Retrieval Baseline
+- **Date**: Oct 19, 2026
+- **What was built**:
+  1. `retrieval/embedder.py`: Singleton `EmbeddingEngine` wrapping `BAAI/bge-small-en-v1.5` (384 dimensions) with L2 normalization, local caching in `D:/hf_cache`, and asymmetric query prefixing (`Represent this sentence for searching relevant passages: `).
+  2. `retrieval/vector_store.py`: Persistent local ChromaDB wrapper configured with HNSW cosine distance (`hnsw:space: "cosine"`), batch upserts, metadata filters (`where`), and structured `SearchResult` objects ($s = 1.0 - d$).
+  3. `retrieval/index_corpus.py`: Batch indexing CLI that embedded all 321 corpus chunks into `chroma_db/campusiq_docs`.
+  4. `retrieval/evaluate_retrieval.py`: Retrieval evaluation harness computing Hit Rate @ $k$ ($k=1, 3, 5, 10$), MRR, and per-query latency.
+  5. `tests/test_phase2_retrieval.py`: Unit tests for embedding dimensions, normalization, search ranking, and metadata filtering (all 13 tests passing across Phases 0, 1, 2).
+- **Real Benchmark Results (`eval/results/retrieval_baseline.json`)**:
+  - **Evaluated Questions**: 24 ground-truth answerable questions
+  - **Average Latency**: 211.93 ms (pure local CPU inference)
+  - **Document MRR**: 0.8636 | **Page MRR**: 0.1458
+  - **Document Hit Rate**:
+    - Hit@1: **79.2%**
+    - Hit@3: **91.7%**
+    - Hit@5: **95.8%**
+    - Hit@10: **100.0%**
+  - **Exact Page Hit Rate**:
+    - Hit@1: **4.2%**
+    - Hit@3: **25.0%**
+    - Hit@5: **25.0%**
+    - Hit@10: **29.2%**
+  - **Page ($\pm 1$) Window Hit Rate**:
+    - Hit@1: **33.3%**
+    - Hit@3: **50.0%**
+    - Hit@5: **62.5%**
+    - Hit@10: **66.7%**
+- **Why this was done (Interview Talking Points)**:
+  - *Asymmetric Retrieval*: Users ask short 5-10 word questions, but source documents are dense 200-500 word administrative rules. BGE prefixing signals the transformer to map questions into passage-level semantic space, boosting top-1 document accuracy to 79.2%.
+  - *Why ChromaDB with HNSW Cosine*: Avoids heavy external database infrastructure. HNSW (Hierarchical Navigable Small World) graph search provides sub-millisecond retrieval once vectors are embedded.
+  - *Why Page Window ($\pm 1$) matters*: Administrative ordinances often state a rule in Section 4.1 on page 12 and elaborate exceptions on page 13. Tracking both exact page and adjacent page hits provides realistic ground-truth calibration for the verifier agent.
+
+

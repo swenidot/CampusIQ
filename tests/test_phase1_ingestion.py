@@ -69,6 +69,8 @@ def test_chunker_no_empty_chunks_and_metadata_preserved():
         page_number=5,
         text=full_text,
         is_scanned=False,
+        applies_to="Students enrolled from July 2019 onwards",
+        document_date="2019-09-03",
     )
 
     chunks = chunker.chunk_page(page)
@@ -83,6 +85,8 @@ def test_chunker_no_empty_chunks_and_metadata_preserved():
         assert c.chunk_index == i, f"Expected chunk_index {i}, got {c.chunk_index}"
         assert c.chunk_id == f"policy_doc_p5_c{i}", f"Invalid chunk_id: {c.chunk_id}"
         assert c.token_count > 0, "token_count must be positive"
+        assert c.applies_to == "Students enrolled from July 2019 onwards", "applies_to not preserved"
+        assert c.document_date == "2019-09-03", "document_date not preserved"
 
 
 def test_chunker_overlap_presence():
@@ -140,6 +144,8 @@ def test_processed_chunks_file_exists_and_valid():
             assert item.get("page") is not None, f"Missing page on line {idx}"
             assert item.get("content", "").strip(), f"Empty chunk content on line {idx}"
             assert item.get("token_count", 0) > 0, f"Invalid token count on line {idx}"
+            assert "applies_to" in item, f"Missing applies_to on line {idx}"
+            assert "document_date" in item, f"Missing document_date on line {idx}"
 
     assert len(chunks) >= 300, f"Expected at least 300 chunks, found {len(chunks)}"
 

@@ -13,12 +13,23 @@ logger = logging.getLogger("campusiq.parser")
 
 
 class PageData:
-    def __init__(self, doc_id: str, title: str, page_number: int, text: str, is_scanned: bool = False):
+    def __init__(
+        self,
+        doc_id: str,
+        title: str,
+        page_number: int,
+        text: str,
+        is_scanned: bool = False,
+        applies_to: str = "",
+        document_date: str = "",
+    ):
         self.doc_id = doc_id
         self.title = title
         self.page_number = page_number
         self.text = text
         self.is_scanned = is_scanned
+        self.applies_to = applies_to
+        self.document_date = document_date
 
     def to_dict(self) -> Dict:
         return {
@@ -27,6 +38,8 @@ class PageData:
             "page_number": self.page_number,
             "text": self.text,
             "is_scanned": self.is_scanned,
+            "applies_to": self.applies_to,
+            "document_date": self.document_date,
         }
 
 
@@ -59,7 +72,14 @@ def clean_text(raw_text: str) -> str:
     return text.strip()
 
 
-def parse_pdf(file_path: str, doc_id: str, title: str, min_chars_per_page: int = 30) -> List[PageData]:
+def parse_pdf(
+    file_path: str,
+    doc_id: str,
+    title: str,
+    min_chars_per_page: int = 30,
+    applies_to: str = "",
+    document_date: str = "",
+) -> List[PageData]:
     """
     Parses a PDF file page by page.
     Returns a list of PageData objects with 1-indexed page numbers.
@@ -86,6 +106,8 @@ def parse_pdf(file_path: str, doc_id: str, title: str, min_chars_per_page: int =
                 page_number=page_number,
                 text=cleaned,
                 is_scanned=is_scanned,
+                applies_to=applies_to,
+                document_date=document_date,
             )
         )
 

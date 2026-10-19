@@ -56,12 +56,20 @@ def run_ingestion(
         file_name = row["file_name"]
         title = row.get("title", file_name)
         pdf_path = os.path.join(raw_dir, file_name)
-
         if not os.path.exists(pdf_path):
             logger.warning(f"[{doc_id}] PDF file not found at: {pdf_path}. Skipping.")
             continue
 
-        pages = parse_pdf(file_path=pdf_path, doc_id=doc_id, title=title)
+        applies_to = row.get("applies_to", "")
+        document_date = row.get("document_date", "")
+
+        pages = parse_pdf(
+            file_path=pdf_path,
+            doc_id=doc_id,
+            title=title,
+            applies_to=applies_to,
+            document_date=document_date,
+        )
         scanned_count = sum(1 for p in pages if p.is_scanned)
         doc_chunks = chunker.chunk_document(pages)
         all_chunks.extend(doc_chunks)
