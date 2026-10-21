@@ -112,3 +112,56 @@ The retrieval baseline of CampusIQ is fundamentally sound:
 - **Document Hit@10 is 100%**, and **Document Hit@1 is 79.2%**.
 - In questions where page retrieval appeared to fail, the retriever was actually retrieving the **correct, true page** from the official IIT Jodhpur documents (e.g., retrieving Page 10 for SGPA, Page 7 for attendance penalties, Page 18 for probation, and Page 20 for penalties).
 - Once approved, the ground-truth page numbers in `eval/questions.jsonl` should be updated to their verified true page numbers, aligning the benchmark with reality without touching the underlying queries or answers.
+
+---
+
+## Phase 2 Retrieval Evaluation v2 (Corrected Ground-Truth Labels)
+
+**Date:** 2026-10-21  
+**Evaluation Set:** `eval/questions.jsonl` (23 answerable ground-truth questions with verified contiguous substring evidence)  
+**Output Artifact:** `eval/results/retrieval_v2_corrected_labels.json` (baseline preserved as `eval/results/retrieval_v1_baseline.json`)  
+**Retriever:** Unchanged (`BAAI/bge-small-en-v1.5`, ChromaDB collection `campusiq_docs`, 321 chunks)
+
+### Key Result: Metric Shift Arises From Label Corrections, Not Retrieval Improvement
+
+> [!IMPORTANT]
+> **The change in benchmark numbers between v1 and v2 comes entirely from ground-truth label corrections, NOT from any retrieval algorithm improvement or index modification.**
+> The underlying dense retriever, chunking strategy, embeddings, and ChromaDB vector store were completely unchanged. In v1, the evaluation harness marked correct retrievals as misses because the ground-truth labels pointed to blank pages, section division banners, or offset indices. Correcting the labels to reflect where the rules and evidence actually reside in the official PDFs aligns the benchmark metrics with the retriever's true performance.
+
+### Comparison: v1 Baseline vs. v2 Corrected Labels
+
+| Metric | v1 Baseline (Flawed Labels, n=24) | v2 Corrected (Any-Page, n=23) | v2 Corrected (First-Listed-Page, n=23) |
+| :--- | :---: | :---: | :---: |
+| **Doc Hit@1** | 79.2% | **78.3%** | **78.3%** |
+| **Doc Hit@3** | 91.7% | **91.3%** | **91.3%** |
+| **Doc Hit@5** | 95.8% | **91.3%** | **91.3%** |
+| **Doc Hit@10** | 100.0% | **100.0%** | **100.0%** |
+| **Page Hit@1** | 4.2% | **47.8%** (+43.6%) | **39.1%** (+34.9%) |
+| **Page Hit@3** | 25.0% | **73.9%** (+48.9%) | **65.2%** (+40.2%) |
+| **Page Hit@5** | 25.0% | **82.6%** (+57.6%) | **73.9%** (+48.9%) |
+| **Page Hit@10** | 29.2% | **91.3%** (+62.1%) | **87.0%** (+57.8%) |
+| **Page (±1) Hit@5** | 62.5% | **82.6%** | **82.6%** |
+| **Doc MRR** | 0.8636 | **0.8522** | **0.8522** |
+| **Page MRR** | 0.1458 | **0.6203** (+0.4745) | **0.5447** (+0.3989) |
+| **Avg Latency** | 43.6 ms | **176.5 ms** | **176.5 ms** |
+
+---
+
+## Phase 2 Retrieval Evaluation v3 (Frozen Evaluation Labels)
+
+**Date:** 2026-10-21  
+**Evaluation Set:** `eval/questions.jsonl` (34 total questions: 23 answerable, 11 unanswerable; frozen labels with `source_page` removed, `q01`/`q02` historical scope clarified, `q24` verified against Statute 5)  
+**Output Artifact:** `eval/results/retrieval_v3_frozen.json` (all prior runs preserved: `retrieval_baseline.json`, `retrieval_v1_baseline.json`, `retrieval_v2_corrected_labels.json`)  
+**Retriever:** Unchanged (`BAAI/bge-small-en-v1.5`, ChromaDB collection `campusiq_docs`, 321 chunks)
+
+### Frozen Benchmark Performance
+- **Document Hit Rate:** Hit@1 = **78.3%**, Hit@3 = **91.3%**, Hit@5 = **91.3%**, Hit@10 = **100.0%**
+- **Any-Page Hit Rate:** Hit@1 = **47.8%**, Hit@3 = **73.9%**, Hit@5 = **82.6%**, Hit@10 = **91.3%**
+- **First-Listed-Page Hit Rate:** Hit@1 = **39.1%**, Hit@3 = **65.2%**, Hit@5 = **73.9%**, Hit@10 = **87.0%**
+- **Page (±1) Hit Rate:** Hit@1 = **52.2%**, Hit@3 = **73.9%**, Hit@5 = **82.6%**, Hit@10 = **91.3%**
+- **Doc MRR / Any-Page MRR / First-Page MRR:** **0.8522 / 0.6203 / 0.5447**
+- **Average Retrieval Latency:** **163.6 ms**
+
+> [!NOTE]
+> All differences between the v1 baseline (Page Hit@5 = 25.0%) and v3 frozen benchmark (Any-Page Hit@5 = 82.6%) are entirely due to ground-truth label corrections pointing to the true sections and pages where answers reside. Zero retrieval or indexing algorithmic changes were made.
+

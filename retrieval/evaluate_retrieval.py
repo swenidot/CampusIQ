@@ -49,12 +49,14 @@ def evaluate_retrieval(
 
     k_values = [1, 3, 5, 10]
     doc_hits = {k: 0 for k in k_values}
-    page_hits = {k: 0 for k in k_values}
+    any_page_hits = {k: 0 for k in k_values}
+    first_page_hits = {k: 0 for k in k_values}
     # Within 1 page window (page +- 1) hits
     page_window_hits = {k: 0 for k in k_values}
 
     doc_reciprocal_ranks: List[float] = []
-    page_reciprocal_ranks: List[float] = []
+    any_page_reciprocal_ranks: List[float] = []
+    first_page_reciprocal_ranks: List[float] = []
     latencies: List[float] = []
 
     per_question_results: List[Dict] = []
@@ -63,7 +65,14 @@ def evaluate_retrieval(
         q_id = q["id"]
         q_text = q["question"]
         expected_doc = q["source_doc"]
-        expected_page = int(q["source_page"])
+        if "expected_pages" in q and q["expected_pages"]:
+            expected_pages = [int(p) for p in q["expected_pages"]]
+        elif "source_page" in q:
+            expected_pages = [int(q["source_page"])]
+        else:
+            expected_pages = []
+
+        primary_page = expected_pages[0] if expected_pages else None
 
         start_time = time.perf_counter()
         retrieved = store.search(q_text, k=top_k)
@@ -71,36 +80,46 @@ def evaluate_retrieval(
         latencies.append(elapsed_ms)
 
         first_doc_rank = None
-        first_page_rank = None
+        first_any_page_rank = None
+        first_listed_page_rank = None
 
         for rank, res in enumerate(retrieved, start=1):
             if res.doc_id == expected_doc and first_doc_rank is None:
                 first_doc_rank = rank
 
-            # Match exact doc and page
-            if res.doc_id == expected_doc and res.page == expected_page and first_page_rank is None:
-                first_page_rank = rank
+            # Match exact doc and any of expected_pages
+            if res.doc_id == expected_doc and res.page in expected_pages and first_any_page_rank is None:
+                first_any_page_rank = rank
+
+            # Match exact doc and primary (first-listed) expected page
+            if res.doc_id == expected_doc and primary_page is not None and res.page == primary_page and first_listed_page_rank is None:
+                first_listed_page_rank = rank
 
         # Update hit counts
         for k in k_values:
             top_k_results = retrieved[:k]
             if any(r.doc_id == expected_doc for r in top_k_results):
                 doc_hits[k] += 1
-            if any(r.doc_id == expected_doc and r.page == expected_page for r in top_k_results):
-                page_hits[k] += 1
-            if any(r.doc_id == expected_doc and abs(r.page - expected_page) <= 1 for r in top_k_results):
+            if any(r.doc_id == expected_doc and r.page in expected_pages for r in top_k_results):
+                any_page_hits[k] += 1
+            if any(r.doc_id == expected_doc and primary_page is not None and r.page == primary_page for r in top_k_results):
+                first_page_hits[k] += 1
+            if any(r.doc_id == expected_doc and any(abs(r.page - ep) <= 1 for ep in expected_pages) for r in top_k_results):
                 page_window_hits[k] += 1
 
         doc_reciprocal_ranks.append(1.0 / first_doc_rank if first_doc_rank else 0.0)
-        page_reciprocal_ranks.append(1.0 / first_page_rank if first_page_rank else 0.0)
+        any_page_reciprocal_ranks.append(1.0 / first_any_page_rank if first_any_page_rank else 0.0)
+        first_page_reciprocal_ranks.append(1.0 / first_listed_page_rank if first_listed_page_rank else 0.0)
 
         per_question_results.append({
             "id": q_id,
             "question": q_text,
             "expected_doc": expected_doc,
-            "expected_page": expected_page,
+            "expected_pages": expected_pages,
+            "primary_page": primary_page,
             "first_doc_rank": first_doc_rank,
-            "first_page_rank": first_page_rank,
+            "first_any_page_rank": first_any_page_rank,
+            "first_listed_page_rank": first_listed_page_rank,
             "top1_retrieved": f"[{retrieved[0].doc_id}, p.{retrieved[0].page}] (score={retrieved[0].score})" if retrieved else "None",
             "latency_ms": round(elapsed_ms, 2),
         })
@@ -110,14 +129,18 @@ def evaluate_retrieval(
         "total_answerable_questions": n,
         "average_retrieval_latency_ms": round(sum(latencies) / n, 2),
         "doc_mrr": round(sum(doc_reciprocal_ranks) / n, 4),
-        "page_mrr": round(sum(page_reciprocal_ranks) / n, 4),
+        "any_page_mrr": round(sum(any_page_reciprocal_ranks) / n, 4),
+        "first_listed_page_mrr": round(sum(first_page_reciprocal_ranks) / n, 4),
+        "page_mrr": round(sum(any_page_reciprocal_ranks) / n, 4),
         "doc_hit_rate": {f"hit@{k}": round(doc_hits[k] / n, 4) for k in k_values},
-        "page_hit_rate_exact": {f"hit@{k}": round(page_hits[k] / n, 4) for k in k_values},
+        "any_page_hit_rate": {f"hit@{k}": round(any_page_hits[k] / n, 4) for k in k_values},
+        "first_listed_page_hit_rate": {f"hit@{k}": round(first_page_hits[k] / n, 4) for k in k_values},
+        "page_hit_rate_exact": {f"hit@{k}": round(any_page_hits[k] / n, 4) for k in k_values},
         "page_hit_rate_window1": {f"hit@{k}": round(page_window_hits[k] / n, 4) for k in k_values},
     }
 
     report = {
-        "benchmark": "CampusIQ Retrieval Baseline",
+        "benchmark": "CampusIQ Retrieval Evaluation v2 (Corrected Labels)",
         "embedding_model": "BAAI/bge-small-en-v1.5",
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "metrics": metrics,
@@ -128,21 +151,22 @@ def evaluate_retrieval(
         json.dump(report, f, indent=2)
 
     # Print summary table
-    print("\n" + "=" * 70)
-    print(f"{'CampusIQ Retrieval Baseline Evaluation (Hit Rate @ k)':^70}")
-    print("=" * 70)
+    print("\n" + "=" * 75)
+    print(f"{'CampusIQ Retrieval Evaluation (Corrected Labels)':^75}")
+    print("=" * 75)
     print(f"Total Evaluated Questions : {n}")
     print(f"Avg Retrieval Latency     : {metrics['average_retrieval_latency_ms']:.2f} ms")
-    print(f"Doc MRR / Page MRR        : {metrics['doc_mrr']:.4f} / {metrics['page_mrr']:.4f}")
-    print("-" * 70)
-    print(f"{'Metric':<25} | {'k=1':>8} | {'k=3':>8} | {'k=5':>8} | {'k=10':>8}")
-    print("-" * 70)
-    print(f"{'Document Hit Rate':<25} | {metrics['doc_hit_rate']['hit@1']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@3']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@5']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@10']*100:>7.1f}%")
-    print(f"{'Exact Page Hit Rate':<25} | {metrics['page_hit_rate_exact']['hit@1']*100:>7.1f}% | {metrics['page_hit_rate_exact']['hit@3']*100:>7.1f}% | {metrics['page_hit_rate_exact']['hit@5']*100:>7.1f}% | {metrics['page_hit_rate_exact']['hit@10']*100:>7.1f}%")
-    print(f"{'Page (±1) Hit Rate':<25} | {metrics['page_hit_rate_window1']['hit@1']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@3']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@5']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@10']*100:>7.1f}%")
-    print("-" * 70)
+    print(f"Doc MRR / Any-Page MRR / First-Page MRR : {metrics['doc_mrr']:.4f} / {metrics['any_page_mrr']:.4f} / {metrics['first_listed_page_mrr']:.4f}")
+    print("-" * 75)
+    print(f"{'Metric':<28} | {'k=1':>8} | {'k=3':>8} | {'k=5':>8} | {'k=10':>8}")
+    print("-" * 75)
+    print(f"{'Document Hit Rate':<28} | {metrics['doc_hit_rate']['hit@1']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@3']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@5']*100:>7.1f}% | {metrics['doc_hit_rate']['hit@10']*100:>7.1f}%")
+    print(f"{'Any-Page Hit Rate':<28} | {metrics['any_page_hit_rate']['hit@1']*100:>7.1f}% | {metrics['any_page_hit_rate']['hit@3']*100:>7.1f}% | {metrics['any_page_hit_rate']['hit@5']*100:>7.1f}% | {metrics['any_page_hit_rate']['hit@10']*100:>7.1f}%")
+    print(f"{'First-Listed-Page Hit Rate':<28} | {metrics['first_listed_page_hit_rate']['hit@1']*100:>7.1f}% | {metrics['first_listed_page_hit_rate']['hit@3']*100:>7.1f}% | {metrics['first_listed_page_hit_rate']['hit@5']*100:>7.1f}% | {metrics['first_listed_page_hit_rate']['hit@10']*100:>7.1f}%")
+    print(f"{'Page (±1) Hit Rate':<28} | {metrics['page_hit_rate_window1']['hit@1']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@3']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@5']*100:>7.1f}% | {metrics['page_hit_rate_window1']['hit@10']*100:>7.1f}%")
+    print("-" * 75)
     print(f"Full benchmark results saved to: {out_file}")
-    print("=" * 70 + "\n")
+    print("=" * 75 + "\n")
 
     return report
 

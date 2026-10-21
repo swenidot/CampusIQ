@@ -48,3 +48,6 @@ Thumbs.db
 
 # OpenTelemetry / traces
 traces/
+
+scratch/
+eval/questions_v1_unverified.jsonl

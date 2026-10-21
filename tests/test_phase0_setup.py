@@ -81,7 +81,9 @@ def test_eval_questions_schema():
                 assert item["source_doc"] in valid_doc_ids, (
                     f"source_doc '{item['source_doc']}' on line {line_num} not found in data/sources.csv"
                 )
-                assert item.get("source_page") is not None, f"Answerable question {item['id']} requires source_page"
+                assert item.get("expected_pages") is not None or item.get("source_page") is not None, (
+                    f"Answerable question {item['id']} requires expected_pages or source_page"
+                )
             else:
                 assert item.get("source_doc") is None or item.get("source_doc") == "", (
                     f"Unanswerable question {item['id']} must have null or empty source_doc"

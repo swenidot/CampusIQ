@@ -61,7 +61,7 @@ def run_ingestion(
             continue
 
         applies_to = row.get("applies_to", "")
-        document_date = row.get("document_date", "")
+        document_date = row.get("file_date", row.get("document_date", ""))
 
         pages = parse_pdf(
             file_path=pdf_path,
