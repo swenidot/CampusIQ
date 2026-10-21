@@ -33,6 +33,7 @@ class SearchResult:
         metadata: Dict[str, Any],
         applies_to: str = "",
         document_date: str = "",
+        file_date: str = "",
     ):
         self.chunk_id = chunk_id
         self.content = content
@@ -43,15 +44,17 @@ class SearchResult:
         self.page = page
         self.metadata = metadata
         self.applies_to = applies_to or metadata.get("applies_to", "")
-        self.document_date = document_date or metadata.get("document_date", "")
+        self.document_date = document_date or file_date or metadata.get("file_date", metadata.get("document_date", ""))
+        self.file_date = self.document_date
 
     def to_citation(self) -> str:
         """
         Formats a human-readable, grounded citation including page and version metadata.
         """
         parts = [f"[{self.title or self.doc_id}, p.{self.page}]"]
-        if self.document_date:
-            parts.append(f"Date: {self.document_date}")
+        date_str = self.file_date or self.document_date
+        if date_str:
+            parts.append(f"Date: {date_str}")
         if self.applies_to:
             parts.append(f"Applies to: {self.applies_to}")
         return " | ".join(parts)

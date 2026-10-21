@@ -165,3 +165,33 @@ The retrieval baseline of CampusIQ is fundamentally sound:
 > [!NOTE]
 > All differences between the v1 baseline (Page Hit@5 = 25.0%) and v3 frozen benchmark (Any-Page Hit@5 = 82.6%) are entirely due to ground-truth label corrections pointing to the true sections and pages where answers reside. Zero retrieval or indexing algorithmic changes were made.
 
+---
+
+## Phase 4: Baseline RAG Evaluation & LLM-as-Judge Benchmark
+
+**Date:** 2026-10-22  
+**Generator Model:** `gemini-3.5-flash-lite`  
+**Judge Model:** `gemini-3.5-flash-lite`  
+**Evaluation Set:** `eval/questions.jsonl` (34 total questions: 23 answerable, 11 unanswerable)  
+**Output Artifacts:** `eval/results/rag_baseline_raw.jsonl`, `eval/results/rag_baseline_scored.json`
+
+> [!WARNING]
+> **Optimistic Bias Advisory:** The LLM-as-judge belongs to the identical model family (`gemini-3.5-flash-lite`) as the generation pipeline. Consequently, agreement scores and CORRECT verdicts may be subject to same-family stylistic and reasoning alignment bias, making automated evaluation scores optimistic until confirmed by manual human review.
+
+### Summary Results Table
+
+| Metric | Measured Value | Benchmark Interpretation |
+| :--- | :---: | :--- |
+| **Unanswerable Correct Abstention Rate** | **11 / 11 (100.0%)** | Zero hallucinations; 4 caught at Stage 1 (threshold < 0.65), 7 at Stage 2 (model abstention). |
+| **Answerable Wrong Abstention Rate** | **8 / 23 (34.8%)** | Model conservatively abstained on answerable questions (`q01`, `q08`, `q12`, `q17`, `q19`, `q20`, `q22`, `q24`). |
+| **Citation Accuracy (>=1 cited doc, page in GT)** | **13 / 15 (86.7%)** | Of the 15 generated answers, 13 cited verified ground-truth pages directly in text. |
+| **Invalid Citation Share** | **1 / 22 (4.5%)** | 21 of 22 cited bracket markers accurately mapped to retrieved chunks with verified dates & scopes. |
+| **LLM Judge: CORRECT** | **21 / 34 (61.8%)** | 10 answerable answers + 11 correct unanswerable abstentions. |
+| **LLM Judge: PARTIAL** | **3 / 34 (8.8%)** | `q09`, `q15`, `q16` captured core aspects but omitted minor details. |
+| **LLM Judge: INCORRECT** | **10 / 34 (29.4%)** | 8 wrong abstentions + 2 answered with factual gaps (`q02`, `q21`). |
+| **Latency p50 / p95** | **72.5 ms / 1906.7 ms** | P50 benefits from Stage 1 thresholding and disk caching; p95 reflects cold dense search + LLM call. |
+| **Tokens per Request (Mean In / Out / Total)** | **2854.9 / 71.0 / 2925.9** | Bounded context prompt with top-5 retrieved chunks. |
+
+### Diagnostic Breakdown: Wrong Abstentions on Answerable Questions (8 / 23)
+The 8 answerable questions where the model abstained (`q01`, `q08`, `q12`, `q17`, `q19`, `q20`, `q22`, `q24`) stem from the strict grounding constraint in the system prompt. When top-5 chunks retrieve adjacent sections or partial schedules rather than the complete clause, the model prefers safe abstention over guessing.
+

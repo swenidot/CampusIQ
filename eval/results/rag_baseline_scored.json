@@ -1,0 +1,1207 @@
+{
+  "summary": {
+    "evaluation_model": "gemini-3.5-flash-lite",
+    "judge_model": "gemini-3.5-flash-lite",
+    "total_questions": 34,
+    "unanswerable_questions": {
+      "total": 11,
+      "correct_abstentions": 11,
+      "correct_abstention_pct": 100.0,
+      "wrong_answers": 0
+    },
+    "answerable_questions": {
+      "total": 23,
+      "answered": 15,
+      "wrong_abstentions": 8,
+      "wrong_abstention_pct": 34.78,
+      "wrong_abstention_ids": [
+        "q01",
+        "q08",
+        "q12",
+        "q17",
+        "q19",
+        "q20",
+        "q22",
+        "q24"
+      ]
+    },
+    "citation_metrics": {
+      "answered_questions_evaluated": 15,
+      "citation_accuracy_hits": 13,
+      "citation_accuracy_pct": 86.67,
+      "total_cited_markers": 22,
+      "invalid_citations_count": 1,
+      "invalid_citations_share_pct": 4.55
+    },
+    "correctness_judge_verdicts": {
+      "CORRECT": 21,
+      "CORRECT_pct": 61.76,
+      "PARTIAL": 3,
+      "PARTIAL_pct": 8.82,
+      "INCORRECT": 10,
+      "INCORRECT_pct": 29.41
+    },
+    "performance_metrics": {
+      "latency_p50_ms": 72.47,
+      "latency_p95_ms": 1906.73,
+      "mean_input_tokens": 2854.9,
+      "mean_output_tokens": 71.0,
+      "mean_total_tokens": 2925.9
+    },
+    "needs_human_check": [
+      "q01",
+      "q02",
+      "q08",
+      "q09",
+      "q12",
+      "q15",
+      "q16",
+      "q17",
+      "q19",
+      "q20",
+      "q21",
+      "q22",
+      "q24",
+      "q38",
+      "q06",
+      "q03",
+      "q14",
+      "q13"
+    ]
+  },
+  "needs_human_check": [
+    "q01",
+    "q02",
+    "q08",
+    "q09",
+    "q12",
+    "q15",
+    "q16",
+    "q17",
+    "q19",
+    "q20",
+    "q21",
+    "q22",
+    "q24",
+    "q38",
+    "q06",
+    "q03",
+    "q14",
+    "q13"
+  ],
+  "results": [
+    {
+      "id": "q01",
+      "question": "Under the 2019 regulations, what is the minimum attendance requirement for students under IIT Jodhpur Academic Regulations?",
+      "answerable": true,
+      "expected_pages": [
+        7
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.8261,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the expected answer was clearly available in standard academic regulations.",
+      "tokens": {
+        "input_tokens": 2008,
+        "output_tokens": 9,
+        "total_tokens": 2017
+      },
+      "latency_ms": 3491.26
+    },
+    {
+      "id": "q02",
+      "question": "Under the 2019 regulations, what consequence does a student face if attendance drops below the 75% threshold without approved leave?",
+      "answerable": true,
+      "expected_pages": [
+        7
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6917,
+      "generated_answer": "Even if a student's attendance falls below 75%, they will be allowed to appear for the exams. However, students not meeting the attendance criterion of 75% will be required to score at least a C grade to pass a course, and they would be awarded an F grade if their marks are lower than the cut-off for a C grade in that course [Academic Regulations and Degree Requirements, p.7].",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.7]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 7,
+          "chunk_id": "rules_ug_2019_p7_c1",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.7] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The generated answer contradicts the ground truth by stating students are allowed to appear for exams.",
+      "tokens": {
+        "input_tokens": 2370,
+        "output_tokens": 87,
+        "total_tokens": 2457
+      },
+      "latency_ms": 1291.42
+    },
+    {
+      "id": "q03",
+      "question": "What is the minimum CGPA required for graduation in the M.Tech. program?",
+      "answerable": true,
+      "expected_pages": [
+        34
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.794,
+      "generated_answer": "The minimum CGPA required for graduation in the M.Tech. program is 5.0 [Academic Regulations and Degree Requirements, p.34].",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.34]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 34,
+          "chunk_id": "rules_ug_2019_p34_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.34] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately states the minimum CGPA of 5.0 required for graduation in the M.Tech. program.",
+      "tokens": {
+        "input_tokens": 4778,
+        "output_tokens": 31,
+        "total_tokens": 4809
+      },
+      "latency_ms": 80.92
+    },
+    {
+      "id": "q04",
+      "question": "What is the maximum allowed duration to complete all undergraduate degree requirements?",
+      "answerable": true,
+      "expected_pages": [
+        17
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7667,
+      "generated_answer": "The maximum duration for the completion of B.Tech. Programs shall be 14 registered semesters [Academic Regulations and Degree Requirements, p.17].",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.17]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 17,
+          "chunk_id": "rules_ug_2019_p17_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.17] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately states the maximum allowed duration as 14 registered semesters, matching the ground truth.",
+      "tokens": {
+        "input_tokens": 3306,
+        "output_tokens": 31,
+        "total_tokens": 3337
+      },
+      "latency_ms": 71.14
+    },
+    {
+      "id": "q05",
+      "question": "What are the passing letter grades and their associated numerical grade points in the grading system?",
+      "answerable": true,
+      "expected_pages": [
+        8
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6982,
+      "generated_answer": "Based on the provided documents, the regular letter grades and their associated numerical grade points on a 10-point scale are as follows:\n\n* **A***: 10 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **A**: 10 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **A-**: 9 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **B**: 8 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **B-**: 7 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **C**: 6 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **C-**: 5 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n* **D**: 4 [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]\n\n*(Note: The CGPA calculation is based on all pass grades, which include A*, A, A-, B, B-, C, C-, and D [Academic Regulations and Degree Requirements, p.10; Academic Programmes Rules & Regulations (2022 Onwards), p.12]. Grades E and F are poor/fail grades carrying grade points 2 and 0 respectively [Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10].)*",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.8; Academic Programmes Rules & Regulations (2022 Onwards), p.10]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 10,
+          "chunk_id": "rules_ug_2019_p10_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.10] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.10; Academic Programmes Rules & Regulations (2022 Onwards), p.12]",
+          "doc_title": "Academic Programmes Rules & Regulations (2022 Onwards)",
+          "page": 12,
+          "chunk_id": "rules_pg_2022_p12_c0",
+          "applies_to": "Students enrolled from July 2022 onwards",
+          "file_date": "2023-02-20",
+          "formatted": "[Academic Programmes Rules & Regulations (2022 Onwards), p.12] | Date: 2023-02-20 | Applies to: Students enrolled from July 2022 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately lists all the passing letter grades and their corresponding numerical grade points matching the ground truth.",
+      "tokens": {
+        "input_tokens": 3677,
+        "output_tokens": 433,
+        "total_tokens": 4110
+      },
+      "latency_ms": 1901.26
+    },
+    {
+      "id": "q06",
+      "question": "How is the Semester Grade Point Average (SGPA) computed mathematically?",
+      "answerable": true,
+      "expected_pages": [
+        10
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.8312,
+      "generated_answer": "The Semester Grade Point Average (SGPA) is calculated as a weighted average of the grades earned by a student in all the courses credited by her/him, reflecting her/his academic performance in the respective semester [Academic Regulations and Degree Requirements, p.10; Academic Programmes Rules & Regulations (2022 Onwards), p.12; M.Tech Academic Regulations and Guidelines, p.14]. \n\nIf the grade points associated with the letter grades earned by a student in $N$ courses registered during a semester are $G_1, G_2, \\dots G_N$, and the corresponding credits are $C_1, C_2, \\dots C_N$, the SGPA is computed mathematically as:\n\n$$\\text{SGPA} = \\frac{C_1 G_1 + C_2 G_2 + \\dots + C_N G_N}{C_1 + C_2 + \\dots + C_N} = \\frac{\\sum_{i=1}^{N} C_i G_i}{\\sum_{i=1}^{N} C_i}$$\n\n*(Sources: [Academic Regulations and Degree Requirements, p.10], [Academic Programmes Rules & Regulations (2022 Onwards), p.12], [M.Sc. Academic Programmes Regulations, p.13], [M.Tech Academic Regulations and Guidelines, p.14])*",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.10; Academic Programmes Rules & Regulations (2022 Onwards), p.12; M.Tech Academic Regulations and Guidelines, p.14]",
+          "doc_title": "M.Tech Academic Regulations and Guidelines",
+          "page": 14,
+          "chunk_id": "rules_mtech_p14_c0",
+          "applies_to": "M.Tech students (July 2014 onwards)",
+          "file_date": "2017-02-13",
+          "formatted": "[M.Tech Academic Regulations and Guidelines, p.14] | Date: 2017-02-13 | Applies to: M.Tech students (July 2014 onwards)",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.10]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 10,
+          "chunk_id": "rules_ug_2019_p10_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.10] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[Academic Programmes Rules & Regulations (2022 Onwards), p.12]",
+          "doc_title": "Academic Programmes Rules & Regulations (2022 Onwards)",
+          "page": 12,
+          "chunk_id": "rules_pg_2022_p12_c0",
+          "applies_to": "Students enrolled from July 2022 onwards",
+          "file_date": "2023-02-20",
+          "formatted": "[Academic Programmes Rules & Regulations (2022 Onwards), p.12] | Date: 2023-02-20 | Applies to: Students enrolled from July 2022 onwards",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[M.Sc. Academic Programmes Regulations, p.13]",
+          "doc_title": "M.Sc. Academic Programmes Regulations",
+          "page": 13,
+          "pages": [
+            13
+          ],
+          "chunk_id": null,
+          "applies_to": null,
+          "file_date": null,
+          "formatted": "[M.Sc. Academic Programmes Regulations, p.13]",
+          "invalid_citation": true
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 1,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately provides the mathematical formula for computing SGPA matching the ground truth.",
+      "tokens": {
+        "input_tokens": 3256,
+        "output_tokens": 297,
+        "total_tokens": 3553
+      },
+      "latency_ms": 1916.88
+    },
+    {
+      "id": "q07",
+      "question": "What academic criteria trigger academic probation or warning for students?",
+      "answerable": true,
+      "expected_pages": [
+        18
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6986,
+      "generated_answer": "Based on the provided documents, the criteria that trigger academic probation or a warning are as follows:\n\n* **Academic Probation:** \n  * From the third semester onward, if a student fails to earn a minimum of 12 credits in any registered semester, they will be placed on academic probation [Academic Regulations and Degree Requirements, p.18].\n  * If a student is on academic probation for two consecutive registered semesters, their registration will be terminated [Academic Regulations and Degree Requirements, p.18].\n\n* **Warning:**\n  * If a student earns less than or equal to 15 credits in any registered semester, a warning shall be given to them and an intimation sent to their parents [Academic Regulations and Degree Requirements, p.18].",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.18]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 18,
+          "chunk_id": "rules_ug_2019_p18_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.18] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately captures both the academic probation and warning criteria as stated in the ground truth.",
+      "tokens": {
+        "input_tokens": 2643,
+        "output_tokens": 158,
+        "total_tokens": 2801
+      },
+      "latency_ms": 86.65
+    },
+    {
+      "id": "q08",
+      "question": "What is the procedure for reporting and approving medical leave?",
+      "answerable": true,
+      "expected_pages": [
+        9,
+        11,
+        21
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6607,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be available.",
+      "tokens": {
+        "input_tokens": 2951,
+        "output_tokens": 9,
+        "total_tokens": 2960
+      },
+      "latency_ms": 77.71
+    },
+    {
+      "id": "q09",
+      "question": "What are the foundation mathematics and computing courses in the B.Tech AI & Data Science curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        10,
+        13
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7374,
+      "generated_answer": "Based on the B.Tech in Artificial Intelligence and Data Science curriculum, the mathematics and computing courses listed in the curriculum structure are:\n\n* **Mathematics I** (I Semester) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]\n* **Mathematics II** (II Semester) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]\n* **Data Structures and Algorithms** (III Semester) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]\n* **Maths for Computing** (III Semester) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]",
+      "citations": [
+        {
+          "marker": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]",
+          "doc_title": "B.Tech in Artificial Intelligence and Data Science Curriculum",
+          "page": 13,
+          "chunk_id": "curriculum_aids_p13_c0",
+          "applies_to": "B.Tech AI & DS students (AY 2020-21 onwards)",
+          "file_date": "2020-10-16",
+          "formatted": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.13] | Date: 2020-10-16 | Applies to: B.Tech AI & DS students (AY 2020-21 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "PARTIAL",
+      "judge_reason": "The generated answer includes some correct courses like Data Structures and Algorithms and Maths for Computing, but omits Maths for Big Data and includes extra courses not specified in the ground truth.",
+      "tokens": {
+        "input_tokens": 2427,
+        "output_tokens": 138,
+        "total_tokens": 2565
+      },
+      "latency_ms": 89.35
+    },
+    {
+      "id": "q10",
+      "question": "What machine learning and artificial intelligence core courses are prescribed in the B.Tech AI & DS curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        10,
+        13
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7714,
+      "generated_answer": "Based on the B.Tech. in Artificial Intelligence and Data Science curriculum, the prescribed programme compulsory courses related to machine learning and artificial intelligence include:\n\n* **Artificial Intelligence** (L-T-P: 3-0-0, Credits: 3) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.10]\n* **Optimization for ML** (L-T-P: 3-0-3, Credits: 4.5) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.10]\n* **Deep Learning** (L-T-P: 3-0-3, Credits: 4.5) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.10]\n* **Dependable AI** (L-T-P: 3-0-0, Credits: 3) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.10]\n* **Pattern Recognition and Machine Learning** (L-T-P: 3-0-2, Credits: 4) [B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]",
+      "citations": [
+        {
+          "marker": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.10]",
+          "doc_title": "B.Tech in Artificial Intelligence and Data Science Curriculum",
+          "page": 10,
+          "chunk_id": "curriculum_aids_p10_c0",
+          "applies_to": "B.Tech AI & DS students (AY 2020-21 onwards)",
+          "file_date": "2020-10-16",
+          "formatted": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.10] | Date: 2020-10-16 | Applies to: B.Tech AI & DS students (AY 2020-21 onwards)",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.13]",
+          "doc_title": "B.Tech in Artificial Intelligence and Data Science Curriculum",
+          "page": 13,
+          "chunk_id": "curriculum_aids_p13_c0",
+          "applies_to": "B.Tech AI & DS students (AY 2020-21 onwards)",
+          "file_date": "2020-10-16",
+          "formatted": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.13] | Date: 2020-10-16 | Applies to: B.Tech AI & DS students (AY 2020-21 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately identifies the core AI and ML courses prescribed in the curriculum.",
+      "tokens": {
+        "input_tokens": 2631,
+        "output_tokens": 248,
+        "total_tokens": 2879
+      },
+      "latency_ms": 78.03
+    },
+    {
+      "id": "q11",
+      "question": "How many total credits are allocated to the B.Tech Project (BTP) in AI & Data Science?",
+      "answerable": true,
+      "expected_pages": [
+        8,
+        14
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7798,
+      "generated_answer": "3 credits [B.Tech in Artificial Intelligence and Data Science Curriculum, p.8]",
+      "citations": [
+        {
+          "marker": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.8]",
+          "doc_title": "B.Tech in Artificial Intelligence and Data Science Curriculum",
+          "page": 8,
+          "chunk_id": "curriculum_aids_p8_c0",
+          "applies_to": "B.Tech AI & DS students (AY 2020-21 onwards)",
+          "file_date": "2020-10-16",
+          "formatted": "[B.Tech in Artificial Intelligence and Data Science Curriculum, p.8] | Date: 2020-10-16 | Applies to: B.Tech AI & DS students (AY 2020-21 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately states the total credits allocated to the BTP as 3.",
+      "tokens": {
+        "input_tokens": 1882,
+        "output_tokens": 18,
+        "total_tokens": 1900
+      },
+      "latency_ms": 70.15
+    },
+    {
+      "id": "q12",
+      "question": "What are the core systems courses prescribed in the Systems Science curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "curriculum_systems_science",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.723,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 4324,
+        "output_tokens": 9,
+        "total_tokens": 4333
+      },
+      "latency_ms": 57.92
+    },
+    {
+      "id": "q13",
+      "question": "Which course covers Lagrange's equations and Hamilton's equations of motion in the BS Physics curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        6,
+        26
+      ],
+      "expected_doc": "curriculum_physics",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7739,
+      "generated_answer": "Lagrange's equations and Hamilton's equations of motion are covered in the **Mechanics-I** course [Undergraduate BS Physics Curriculum Framework, p.26].",
+      "citations": [
+        {
+          "marker": "[Undergraduate BS Physics Curriculum Framework, p.26]",
+          "doc_title": "Undergraduate BS Physics Curriculum Framework",
+          "page": 26,
+          "chunk_id": "curriculum_physics_p26_c0",
+          "applies_to": "BS Physics students (August 2023 onwards)",
+          "file_date": "2023-08-03",
+          "formatted": "[Undergraduate BS Physics Curriculum Framework, p.26] | Date: 2023-08-03 | Applies to: BS Physics students (August 2023 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately identifies the Mechanics-I course as covering the specified equations, matching the ground truth.",
+      "tokens": {
+        "input_tokens": 3941,
+        "output_tokens": 36,
+        "total_tokens": 3977
+      },
+      "latency_ms": 77.12
+    },
+    {
+      "id": "q14",
+      "question": "What are the core compulsory modules in the M.Tech Cyber-Physical Systems (CPS) curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "curriculum_mtech_cps",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7733,
+      "generated_answer": "Based on the M.Tech. CPS curriculum, the core compulsory (C) courses are:\n\n* **I Semester:**\n  * EEL7XX0 Introduction to Cyber-Physical Systems (3-0-0, 3 credits) [M.Tech in Cyber-Physical Systems Curriculum, p.1]\n  * EEL7XX0 Embedded System Design (3-0-0, 3 credits) [M.Tech in Cyber-Physical Systems Curriculum, p.1]\n\n* **II Semester:**\n  * EEL7XX0 Data Communication and Networking (2-0-2, 3 credits) [M.Tech in Cyber-Physical Systems Curriculum, p.1]\n  * EEL7XX0 Advanced Control System (3-0-0, 3 credits) [M.Tech in Cyber-Physical Systems Curriculum, p.1]\n\n* **III & IV Semesters:**\n  * MET8XX0 Thesis (16 credits per semester) [M.Tech in Cyber-Physical Systems Curriculum, p.1]",
+      "citations": [
+        {
+          "marker": "[M.Tech in Cyber-Physical Systems Curriculum, p.1]",
+          "doc_title": "M.Tech in Cyber-Physical Systems Curriculum",
+          "page": 1,
+          "chunk_id": "curriculum_mtech_cps_p1_c0",
+          "applies_to": "M.Tech CPS students (August 2025 onwards)",
+          "file_date": "2025-08-01",
+          "formatted": "[M.Tech in Cyber-Physical Systems Curriculum, p.1] | Date: 2025-08-01 | Applies to: M.Tech CPS students (August 2025 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately identifies all the core compulsory modules for the M.Tech CPS curriculum matching the ground truth.",
+      "tokens": {
+        "input_tokens": 4910,
+        "output_tokens": 222,
+        "total_tokens": 5132
+      },
+      "latency_ms": 71.12
+    },
+    {
+      "id": "q15",
+      "question": "What is the minimum CGPA required to maintain financial assistance or teaching assistantship in postgraduate programs?",
+      "answerable": true,
+      "expected_pages": [
+        27
+      ],
+      "expected_doc": "rules_pg_2022",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7773,
+      "generated_answer": "Based on the official documents, the minimum CGPA requirements for the continuation of Assistantship/Fellowship in postgraduate programs are:\n\n* **For students enrolled from July 2019 onwards (Table 22.8):**\n  * M.Tech.: 6.5 [Academic Regulations and Degree Requirements, p.34]\n  * Dual Degree (M.Tech. and Ph.D.): 7.0 [Academic Regulations and Degree Requirements, p.34]\n  * Ph.D.: 7.0 [Academic Regulations and Degree Requirements, p.34]\n\n* **For students enrolled from July 2022 onwards (Table 12.8):**\n  * M.Tech.: 6.0 [Academic Programmes Rules & Regulations (2022 Onwards), p.27]\n  * Dual Degree (M.Tech. and Ph.D.): 6.5 [Academic Programmes Rules & Regulations (2022 Onwards), p.27]\n  * Ph.D.: 6.5 [Academic Programmes Rules & Regulations (2022 Onwards), p.27]",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.34]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 34,
+          "chunk_id": "rules_ug_2019_p34_c0",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.34] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[Academic Programmes Rules & Regulations (2022 Onwards), p.27]",
+          "doc_title": "Academic Programmes Rules & Regulations (2022 Onwards)",
+          "page": 27,
+          "chunk_id": "rules_pg_2022_p27_c0",
+          "applies_to": "Students enrolled from July 2022 onwards",
+          "file_date": "2023-02-20",
+          "formatted": "[Academic Programmes Rules & Regulations (2022 Onwards), p.27] | Date: 2023-02-20 | Applies to: Students enrolled from July 2022 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "PARTIAL",
+      "judge_reason": "The generated answer includes extra historical criteria, missing the exact singular focus of the expected ground truth.",
+      "tokens": {
+        "input_tokens": 3546,
+        "output_tokens": 246,
+        "total_tokens": 3792
+      },
+      "latency_ms": 65.67
+    },
+    {
+      "id": "q16",
+      "question": "What is the thesis submission and evaluation procedure for M.Tech students?",
+      "answerable": true,
+      "expected_pages": [
+        34,
+        35
+      ],
+      "expected_doc": "rules_pg_2022",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7218,
+      "generated_answer": "After completing the coursework, M.Tech. students will be involved in one year of active research towards their M.Tech. Thesis [M.Tech Academic Regulations and Guidelines, p.8]. \n\nThe thesis submission and evaluation procedure involves the following:\n* The normal duration of the M.Tech. program and the duration for which the assistantship will be paid is 22 months, though in exceptional cases, the Academic Committee (AC) can extend the date of submission of the Thesis by up to 2 months [M.Tech Academic Regulations and Guidelines, p.9].\n* After the successful completion of the required courses, an M.Tech. student must continue to register in the following semester till she/he submits her/his Thesis [M.Tech Academic Regulations and Guidelines, p.9].\n* The Thesis Examination shall be coordinated by the Supervisor and at least two other Faculty Members from the Institute nominated by the Supervisor and approved by the Coordinator (Academics) [M.Tech Academic Regulations and Guidelines, p.8].\n* The Supervisor will be solely responsible for submitting the grades of her/his M.Tech. student’s Thesis [M.Tech Academic Regulations and Guidelines, p.8].",
+      "citations": [
+        {
+          "marker": "[M.Tech Academic Regulations and Guidelines, p.8]",
+          "doc_title": "M.Tech Academic Regulations and Guidelines",
+          "page": 8,
+          "chunk_id": "rules_mtech_p8_c0",
+          "applies_to": "M.Tech students (July 2014 onwards)",
+          "file_date": "2017-02-13",
+          "formatted": "[M.Tech Academic Regulations and Guidelines, p.8] | Date: 2017-02-13 | Applies to: M.Tech students (July 2014 onwards)",
+          "invalid_citation": false
+        },
+        {
+          "marker": "[M.Tech Academic Regulations and Guidelines, p.9]",
+          "doc_title": "M.Tech Academic Regulations and Guidelines",
+          "page": 9,
+          "chunk_id": "rules_mtech_p9_c0",
+          "applies_to": "M.Tech students (July 2014 onwards)",
+          "file_date": "2017-02-13",
+          "formatted": "[M.Tech Academic Regulations and Guidelines, p.9] | Date: 2017-02-13 | Applies to: M.Tech students (July 2014 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The generated answer misses the specific thesis evaluation and examiner selection procedure outlined in the ground truth.",
+      "tokens": {
+        "input_tokens": 3661,
+        "output_tokens": 251,
+        "total_tokens": 3912
+      },
+      "latency_ms": 64.04
+    },
+    {
+      "id": "q17",
+      "question": "What is the credit requirement for graduation in M.Sc. programs at IIT Jodhpur?",
+      "answerable": true,
+      "expected_pages": [
+        11,
+        18
+      ],
+      "expected_doc": "rules_msc",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7768,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained even though the answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 2425,
+        "output_tokens": 9,
+        "total_tokens": 2434
+      },
+      "latency_ms": 68.99
+    },
+    {
+      "id": "q18",
+      "question": "When do classes commence for the Autumn Semester in Academic Year 2026-27 as per the Academic Calendar?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "academic_calendar_ay2026_27",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6839,
+      "generated_answer": "Classes commence for Semester I (2026-27) on 30 July 2026, Thu [IIT Jodhpur Academic Calendar AY 2026-27, p.1].",
+      "citations": [
+        {
+          "marker": "[IIT Jodhpur Academic Calendar AY 2026-27, p.1]",
+          "doc_title": "IIT Jodhpur Academic Calendar AY 2026-27",
+          "page": 1,
+          "chunk_id": "academic_calendar_ay2026_27_p1_c0",
+          "applies_to": "All students AY 2026-27",
+          "file_date": "2026-10-01",
+          "formatted": "[IIT Jodhpur Academic Calendar AY 2026-27, p.1] | Date: 2026-10-01 | Applies to: All students AY 2026-27",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately states the commencement date for the Autumn Semester classes.",
+      "tokens": {
+        "input_tokens": 3383,
+        "output_tokens": 46,
+        "total_tokens": 3429
+      },
+      "latency_ms": 79.51
+    },
+    {
+      "id": "q19",
+      "question": "When are the Mid-Semester and End-Semester examinations scheduled for Autumn 2026?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        6,
+        8
+      ],
+      "expected_doc": "academic_calendar_ay2026_27",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6676,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the expected answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 3436,
+        "output_tokens": 9,
+        "total_tokens": 3445
+      },
+      "latency_ms": 68.69
+    },
+    {
+      "id": "q20",
+      "question": "What is the duration and purpose of the Summer Term according to the Summer Term Academic Calendar?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "academic_calendar_summer2026",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7712,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the ground truth was available to evaluate.",
+      "tokens": {
+        "input_tokens": 2345,
+        "output_tokens": 9,
+        "total_tokens": 2354
+      },
+      "latency_ms": 77.77
+    },
+    {
+      "id": "q21",
+      "question": "What are the statutory authorities of IIT Jodhpur defined in the First Statutes?",
+      "answerable": true,
+      "expected_pages": [
+        1,
+        4
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7439,
+      "generated_answer": "The statutory authorities of the Institute are the Authorities of the Institute as specified in section 10 of the Act [IIT Jodhpur First Statutes Authorities and Governance Code, p.1].",
+      "citations": [
+        {
+          "marker": "[IIT Jodhpur First Statutes Authorities and Governance Code, p.1]",
+          "doc_title": "IIT Jodhpur First Statutes Authorities and Governance Code",
+          "page": 1,
+          "chunk_id": "statutes_code_of_conduct_p1_c0",
+          "applies_to": "IIT Jodhpur administration and students",
+          "file_date": "2017-07-31",
+          "formatted": "[IIT Jodhpur First Statutes Authorities and Governance Code, p.1] | Date: 2017-07-31 | Applies to: IIT Jodhpur administration and students",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": true,
+      "invalid_citations_count": 0,
+      "judge_verdict": "PARTIAL",
+      "judge_reason": "The generated answer refers to the Act rather than explicitly naming the four specific statutory authorities.",
+      "tokens": {
+        "input_tokens": 3179,
+        "output_tokens": 37,
+        "total_tokens": 3216
+      },
+      "latency_ms": 69.62
+    },
+    {
+      "id": "q22",
+      "question": "What are the responsibilities and disciplinary powers of the Wardens of Hostels under the Statutes?",
+      "answerable": true,
+      "expected_pages": [
+        12
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7121,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained even though the answer was expected from the documents.",
+      "tokens": {
+        "input_tokens": 2767,
+        "output_tokens": 9,
+        "total_tokens": 2776
+      },
+      "latency_ms": 72.57
+    },
+    {
+      "id": "q23",
+      "question": "What penalties can be imposed on students for indiscipline according to institute rules?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6954,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 2202,
+        "output_tokens": 9,
+        "total_tokens": 2211
+      },
+      "latency_ms": 71.7
+    },
+    {
+      "id": "q24",
+      "question": "What constitutes the Senate and what is its primary jurisdiction at IIT Jodhpur?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.697,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be provided.",
+      "tokens": {
+        "input_tokens": 3975,
+        "output_tokens": 9,
+        "total_tokens": 3984
+      },
+      "latency_ms": 64.23
+    },
+    {
+      "id": "q25",
+      "question": "What is the fee refund policy for personal swimming pool passes at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_1_threshold",
+      "abstention_reason": "score_below_threshold",
+      "model": null,
+      "top_score": 0.6458,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information was not in the documents.",
+      "tokens": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 58.59
+    },
+    {
+      "id": "q26",
+      "question": "What are the credit requirements for Stanford University's MS in Computer Science?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7214,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not in the IIT Jodhpur documents.",
+      "tokens": {
+        "input_tokens": 4315,
+        "output_tokens": 9,
+        "total_tokens": 4324
+      },
+      "latency_ms": 67.32
+    },
+    {
+      "id": "q27",
+      "question": "What is the exact dinner menu for the IIT Jodhpur hostel mess on December 31, 2030?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_1_threshold",
+      "abstention_reason": "score_below_threshold",
+      "model": null,
+      "top_score": 0.6353,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 72.38
+    },
+    {
+      "id": "q28",
+      "question": "What was the mid-term score of a student in Linear Algebra?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_1_threshold",
+      "abstention_reason": "score_below_threshold",
+      "model": null,
+      "top_score": 0.6132,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 64.95
+    },
+    {
+      "id": "q33",
+      "question": "What is the annual hostel room rent and amenity fee charged to undergraduate students at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6929,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 2996,
+        "output_tokens": 9,
+        "total_tokens": 3005
+      },
+      "latency_ms": 75.64
+    },
+    {
+      "id": "q34",
+      "question": "What is the standard weekly breakfast and dinner schedule for the hostel dining mess?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_1_threshold",
+      "abstention_reason": "score_below_threshold",
+      "model": null,
+      "top_score": 0.539,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 63.95
+    },
+    {
+      "id": "q35",
+      "question": "What was the highest and average CTC campus placement package for B.Tech in Artificial Intelligence & Data Science?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6843,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 3939,
+        "output_tokens": 9,
+        "total_tokens": 3948
+      },
+      "latency_ms": 67.23
+    },
+    {
+      "id": "q36",
+      "question": "What is the monetary penalty fee for late submission of the B.Tech Project (BTP) report?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6581,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 2433,
+        "output_tokens": 9,
+        "total_tokens": 2442
+      },
+      "latency_ms": 75.03
+    },
+    {
+      "id": "q37",
+      "question": "How many days of paternity leave are granted to married postgraduate students at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.713,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 3657,
+        "output_tokens": 9,
+        "total_tokens": 3666
+      },
+      "latency_ms": 76.75
+    },
+    {
+      "id": "q38",
+      "question": "What is the minimum qualifying score required for undergraduate students in the Hindi typing proficiency test?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "stage_2_model",
+      "abstention_reason": "model_abstention",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7015,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 3704,
+        "output_tokens": 9,
+        "total_tokens": 3713
+      },
+      "latency_ms": 76.44
+    }
+  ]
+}

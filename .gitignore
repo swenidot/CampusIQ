@@ -55,3 +55,5 @@ eval/results/*cache*
 .cache/
 
 !eval/results/*.json
+eval/results/rag_cache.json
+eval/results/judge_cache.json
