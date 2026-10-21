@@ -1,0 +1,271 @@
+{
+  "benchmark": "CampusIQ Retrieval Baseline",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "timestamp": "2026-10-19 04:22:02",
+  "metrics": {
+    "total_answerable_questions": 24,
+    "average_retrieval_latency_ms": 43.6,
+    "doc_mrr": 0.8636,
+    "page_mrr": 0.1458,
+    "doc_hit_rate": {
+      "hit@1": 0.7917,
+      "hit@3": 0.9167,
+      "hit@5": 0.9583,
+      "hit@10": 1.0
+    },
+    "page_hit_rate_exact": {
+      "hit@1": 0.0417,
+      "hit@3": 0.25,
+      "hit@5": 0.25,
+      "hit@10": 0.2917
+    },
+    "page_hit_rate_window1": {
+      "hit@1": 0.3333,
+      "hit@3": 0.5,
+      "hit@5": 0.625,
+      "hit@10": 0.6667
+    }
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "question": "What is the minimum attendance requirement for students under IIT Jodhpur Academic Regulations?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 12,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.1] (score=0.7955)",
+      "latency_ms": 329.93
+    },
+    {
+      "id": "q02",
+      "question": "What consequence does a student face if attendance drops below the 75% threshold without approved leave?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 13,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.7] (score=0.7137)",
+      "latency_ms": 29.71
+    },
+    {
+      "id": "q03",
+      "question": "What is the minimum Cumulative Grade Point Average (CGPA) required for graduation in academic programs?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 16,
+      "first_doc_rank": 4,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_msc, p.15] (score=0.7888)",
+      "latency_ms": 32.84
+    },
+    {
+      "id": "q04",
+      "question": "What is the maximum allowed duration to complete all undergraduate degree requirements?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 7,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.19] (score=0.7667)",
+      "latency_ms": 59.86
+    },
+    {
+      "id": "q05",
+      "question": "What are the passing letter grades and their associated numerical grade points in the grading system?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 14,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.8] (score=0.6982)",
+      "latency_ms": 25.25
+    },
+    {
+      "id": "q06",
+      "question": "How is the Semester Grade Point Average (SGPA) computed mathematically?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 15,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.10] (score=0.8312)",
+      "latency_ms": 26.95
+    },
+    {
+      "id": "q07",
+      "question": "What academic criteria trigger academic probation or warning for students?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 17,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.18] (score=0.6986)",
+      "latency_ms": 27.69
+    },
+    {
+      "id": "q08",
+      "question": "What is the procedure for reporting and approving medical leave?",
+      "expected_doc": "rules_ug_2019",
+      "expected_page": 13,
+      "first_doc_rank": 7,
+      "first_page_rank": null,
+      "top1_retrieved": "[statutes_code_of_conduct, p.26] (score=0.6607)",
+      "latency_ms": 28.74
+    },
+    {
+      "id": "q09",
+      "question": "What are the foundation mathematics and computing courses in the B.Tech AI & Data Science curriculum?",
+      "expected_doc": "curriculum_aids",
+      "expected_page": 2,
+      "first_doc_rank": 1,
+      "first_page_rank": 2,
+      "top1_retrieved": "[curriculum_aids, p.3] (score=0.7374)",
+      "latency_ms": 29.52
+    },
+    {
+      "id": "q10",
+      "question": "What machine learning and artificial intelligence core courses are prescribed in the B.Tech AI & DS curriculum?",
+      "expected_doc": "curriculum_aids",
+      "expected_page": 3,
+      "first_doc_rank": 1,
+      "first_page_rank": 2,
+      "top1_retrieved": "[curriculum_aids, p.2] (score=0.7714)",
+      "latency_ms": 28.18
+    },
+    {
+      "id": "q11",
+      "question": "How many total credits are allocated to the B.Tech Project (BTP) in AI & Data Science?",
+      "expected_doc": "curriculum_aids",
+      "expected_page": 4,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[curriculum_aids, p.3] (score=0.7798)",
+      "latency_ms": 32.48
+    },
+    {
+      "id": "q12",
+      "question": "What are the core systems courses prescribed in the Systems Science curriculum?",
+      "expected_doc": "curriculum_systems_science",
+      "expected_page": 2,
+      "first_doc_rank": 1,
+      "first_page_rank": 1,
+      "top1_retrieved": "[curriculum_systems_science, p.2] (score=0.723)",
+      "latency_ms": 26.6
+    },
+    {
+      "id": "q13",
+      "question": "What are the foundational laboratory courses in the BS Physics curriculum framework?",
+      "expected_doc": "curriculum_physics",
+      "expected_page": 5,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[curriculum_physics, p.6] (score=0.7344)",
+      "latency_ms": 27.71
+    },
+    {
+      "id": "q14",
+      "question": "What are the core compulsory modules in the M.Tech Cyber-Physical Systems (CPS) curriculum?",
+      "expected_doc": "curriculum_mtech_cps",
+      "expected_page": 2,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[curriculum_mtech_cps, p.1] (score=0.7733)",
+      "latency_ms": 31.72
+    },
+    {
+      "id": "q15",
+      "question": "What is the minimum CGPA required to maintain financial assistance or teaching assistantship in postgraduate programs?",
+      "expected_doc": "rules_pg_2022",
+      "expected_page": 8,
+      "first_doc_rank": 2,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_ug_2019, p.34] (score=0.7773)",
+      "latency_ms": 30.99
+    },
+    {
+      "id": "q16",
+      "question": "What is the thesis submission and evaluation procedure for M.Tech students?",
+      "expected_doc": "rules_mtech",
+      "expected_page": 6,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_mtech, p.9] (score=0.7218)",
+      "latency_ms": 30.68
+    },
+    {
+      "id": "q17",
+      "question": "What is the credit requirement for graduation in M.Sc. programs at IIT Jodhpur?",
+      "expected_doc": "rules_msc",
+      "expected_page": 4,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[rules_msc, p.1] (score=0.7768)",
+      "latency_ms": 33.76
+    },
+    {
+      "id": "q18",
+      "question": "When do classes commence for the Autumn Semester in Academic Year 2026-27 as per the Academic Calendar?",
+      "expected_doc": "academic_calendar_ay2026_27",
+      "expected_page": 1,
+      "first_doc_rank": 2,
+      "first_page_rank": 2,
+      "top1_retrieved": "[academic_calendar_summer2026, p.1] (score=0.6839)",
+      "latency_ms": 29.92
+    },
+    {
+      "id": "q19",
+      "question": "When are the Mid-Semester and End-Semester examinations scheduled for Autumn 2026?",
+      "expected_doc": "academic_calendar_ay2026_27",
+      "expected_page": 2,
+      "first_doc_rank": 1,
+      "first_page_rank": 2,
+      "top1_retrieved": "[academic_calendar_ay2026_27, p.5] (score=0.6676)",
+      "latency_ms": 27.4
+    },
+    {
+      "id": "q20",
+      "question": "What is the duration and purpose of the Summer Term according to the Summer Term Academic Calendar?",
+      "expected_doc": "academic_calendar_summer2026",
+      "expected_page": 1,
+      "first_doc_rank": 3,
+      "first_page_rank": 3,
+      "top1_retrieved": "[rules_ug_2019, p.2] (score=0.7712)",
+      "latency_ms": 31.28
+    },
+    {
+      "id": "q21",
+      "question": "What are the statutory authorities of IIT Jodhpur defined in the First Statutes?",
+      "expected_doc": "statutes_code_of_conduct",
+      "expected_page": 3,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[statutes_code_of_conduct, p.1] (score=0.7439)",
+      "latency_ms": 33.67
+    },
+    {
+      "id": "q22",
+      "question": "What are the responsibilities and disciplinary powers of the Wardens of Hostels under the Statutes?",
+      "expected_doc": "statutes_code_of_conduct",
+      "expected_page": 7,
+      "first_doc_rank": 1,
+      "first_page_rank": 6,
+      "top1_retrieved": "[statutes_code_of_conduct, p.12] (score=0.7121)",
+      "latency_ms": 28.85
+    },
+    {
+      "id": "q23",
+      "question": "What penalties can be imposed on students for acts of indiscipline according to institute rules?",
+      "expected_doc": "statutes_code_of_conduct",
+      "expected_page": 10,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[statutes_code_of_conduct, p.20] (score=0.7023)",
+      "latency_ms": 28.64
+    },
+    {
+      "id": "q24",
+      "question": "What constitutes the Senate and what is its primary jurisdiction at IIT Jodhpur?",
+      "expected_doc": "statutes_code_of_conduct",
+      "expected_page": 4,
+      "first_doc_rank": 1,
+      "first_page_rank": null,
+      "top1_retrieved": "[statutes_code_of_conduct, p.3] (score=0.697)",
+      "latency_ms": 33.92
+    }
+  ]
+}

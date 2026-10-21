@@ -36,7 +36,6 @@ wheels/
 chroma_db/
 data/raw/
 data/processed/
-eval/results/
 logs/
 *.log
 
@@ -51,3 +50,8 @@ traces/
 
 scratch/
 eval/questions_v1_unverified.jsonl
+
+eval/results/*cache*
+.cache/
+
+!eval/results/*.json
