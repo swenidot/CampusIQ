@@ -1,0 +1,144 @@
+{
+  "wrong_abstentions_count": 8,
+  "classification_counts": {
+    "RETRIEVAL_MISS": 3,
+    "MODEL_OVER_REFUSAL": 5
+  },
+  "k8_rerun_summary": {
+    "tested_count": 5,
+    "answered_count": 0,
+    "abstained_count": 5
+  },
+  "answerable_only_scores": {
+    "total_answerable": 23,
+    "correct": 10,
+    "correct_pct": 43.48,
+    "partial": 3,
+    "partial_pct": 13.04,
+    "incorrect": 2,
+    "incorrect_pct": 8.7,
+    "wrong_abstained": 8,
+    "wrong_abstained_pct": 34.78
+  },
+  "diagnosis_details": [
+    {
+      "id": "q01",
+      "question": "Under the 2019 regulations, what is the minimum attendance requirement for students under IIT Jodhpur Academic Regulations?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.8261,
+      "expected_pages": [
+        7
+      ],
+      "expected_doc": "rules_ug_2019",
+      "retrieved_right_page_in_top_5": false,
+      "first_matching_rank": null,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "RETRIEVAL_MISS"
+    },
+    {
+      "id": "q08",
+      "question": "What is the procedure for reporting and approving medical leave?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.6607,
+      "expected_pages": [
+        9,
+        11,
+        21
+      ],
+      "expected_doc": "rules_ug_2019",
+      "retrieved_right_page_in_top_5": false,
+      "first_matching_rank": null,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "RETRIEVAL_MISS"
+    },
+    {
+      "id": "q12",
+      "question": "What are the core systems courses prescribed in the Systems Science curriculum?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.723,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "curriculum_systems_science",
+      "retrieved_right_page_in_top_5": true,
+      "first_matching_rank": 1,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "MODEL_OVER_REFUSAL"
+    },
+    {
+      "id": "q17",
+      "question": "What is the credit requirement for graduation in M.Sc. programs at IIT Jodhpur?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.7768,
+      "expected_pages": [
+        11,
+        18
+      ],
+      "expected_doc": "rules_msc",
+      "retrieved_right_page_in_top_5": false,
+      "first_matching_rank": null,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "RETRIEVAL_MISS"
+    },
+    {
+      "id": "q19",
+      "question": "When are the Mid-Semester and End-Semester examinations scheduled for Autumn 2026?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.6676,
+      "expected_pages": [
+        2,
+        6,
+        8
+      ],
+      "expected_doc": "academic_calendar_ay2026_27",
+      "retrieved_right_page_in_top_5": true,
+      "first_matching_rank": 2,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "MODEL_OVER_REFUSAL"
+    },
+    {
+      "id": "q20",
+      "question": "What is the duration and purpose of the Summer Term according to the Summer Term Academic Calendar?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.7712,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "academic_calendar_summer2026",
+      "retrieved_right_page_in_top_5": true,
+      "first_matching_rank": 3,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "MODEL_OVER_REFUSAL"
+    },
+    {
+      "id": "q22",
+      "question": "What are the responsibilities and disciplinary powers of the Wardens of Hostels under the Statutes?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.7121,
+      "expected_pages": [
+        12
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "retrieved_right_page_in_top_5": true,
+      "first_matching_rank": 1,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "MODEL_OVER_REFUSAL"
+    },
+    {
+      "id": "q24",
+      "question": "What constitutes the Senate and what is its primary jurisdiction at IIT Jodhpur?",
+      "abstention_stage": "stage_2_model",
+      "top_1_score": 0.697,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "retrieved_right_page_in_top_5": true,
+      "first_matching_rank": 1,
+      "refusal_text": "I could not find this in the documents.",
+      "classification": "MODEL_OVER_REFUSAL"
+    }
+  ]
+}

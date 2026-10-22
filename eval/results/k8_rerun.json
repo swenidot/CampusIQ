@@ -1,0 +1,32 @@
+{
+  "q12": {
+    "abstained": true,
+    "answer": "I could not find this in the documents.",
+    "citations": [],
+    "top_score": 0.723
+  },
+  "q19": {
+    "abstained": true,
+    "answer": "I could not find this in the documents.",
+    "citations": [],
+    "top_score": 0.6676
+  },
+  "q20": {
+    "abstained": true,
+    "answer": "I could not find this in the documents.",
+    "citations": [],
+    "top_score": 0.7712
+  },
+  "q22": {
+    "abstained": true,
+    "answer": "I could not find this in the documents.",
+    "citations": [],
+    "top_score": 0.7121
+  },
+  "q24": {
+    "abstained": true,
+    "answer": "I could not find this in the documents.",
+    "citations": [],
+    "top_score": 0.697
+  }
+}

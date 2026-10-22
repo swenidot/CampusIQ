@@ -236,3 +236,34 @@ class VectorStore:
             applies_to=meta.get("applies_to", ""),
             document_date=meta.get("document_date", ""),
         )
+
+    def get_page_chunks(self, doc_id: str, page: int) -> List[SearchResult]:
+        """
+        Retrieves all chunks belonging to a specific document and page.
+        """
+        clean_doc_id = doc_id.replace(".pdf", "").strip()
+        res = self.collection.get(
+            where={"doc_id": clean_doc_id},
+            include=["documents", "metadatas"],
+        )
+        if not res or not res["ids"]:
+            return []
+
+        results: List[SearchResult] = []
+        for chunk_id, doc, meta in zip(res["ids"], res["documents"], res["metadatas"]):
+            if int(meta.get("page", 0)) == int(page):
+                results.append(
+                    SearchResult(
+                        chunk_id=chunk_id,
+                        content=doc,
+                        score=1.0,
+                        distance=0.0,
+                        doc_id=meta.get("doc_id", ""),
+                        title=meta.get("title", ""),
+                        page=int(meta.get("page", 0)),
+                        metadata=meta,
+                        applies_to=meta.get("applies_to", ""),
+                        document_date=meta.get("document_date", ""),
+                    )
+                )
+        return results

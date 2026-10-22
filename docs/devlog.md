@@ -194,4 +194,9 @@ The retrieval baseline of CampusIQ is fundamentally sound:
 
 ### Diagnostic Breakdown: Wrong Abstentions on Answerable Questions (8 / 23)
 The 8 answerable questions where the model abstained (`q01`, `q08`, `q12`, `q17`, `q19`, `q20`, `q22`, `q24`) stem from the strict grounding constraint in the system prompt. When top-5 chunks retrieve adjacent sections or partial schedules rather than the complete clause, the model prefers safe abstention over guessing.
+- **Classification of 8 Wrong Abstentions:** 3 `RETRIEVAL_MISS` (`q01`, `q08`, `q17`: expected page outside top-5) and 5 `MODEL_OVER_REFUSAL` (`q12`, `q19`, `q20`, `q22`, `q24`: expected page retrieved at rank 1–3, but model refused).
+- **Abstention Stage Analysis:** 100% (8/8) occurred at Stage 2 (model generation constraint); 0 were blocked by the Stage 1 similarity threshold.
+- **k=8 Depth Scaling Experiment:** Rerunning the 5 `MODEL_OVER_REFUSAL` queries with $k=8$ resulted in 0/5 answered, proving that deeper chunk retrieval alone does not resolve prompt-enforced refusal thresholds.
+- **Answerable-Only Ground Truth Performance (n=23):** Correct: 10/23 (43.5%), Partial: 3/23 (13.0%), Incorrect: 2/23 (8.7%), Wrong-Abstained: 8/23 (34.8%).
+- **Engineering Target for Phase 5+:** Implement hybrid dense+BM25 search to address retrieval misses and refine prompt instructions for administrative schedules and multi-clause rules.
 
