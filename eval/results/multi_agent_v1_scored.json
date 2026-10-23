@@ -1,0 +1,1012 @@
+{
+  "summary": {
+    "evaluation_model": "gemini-3.5-flash-lite",
+    "judge_model": "gemini-3.5-flash-lite",
+    "total_questions": 34,
+    "unanswerable_questions": {
+      "total": 11,
+      "correct_abstentions": 11,
+      "correct_abstention_pct": 100.0,
+      "wrong_answers": 0
+    },
+    "answerable_questions": {
+      "total": 23,
+      "answered": 7,
+      "wrong_abstentions": 16,
+      "wrong_abstention_pct": 69.57,
+      "wrong_abstention_ids": [
+        "q01",
+        "q04",
+        "q05",
+        "q06",
+        "q08",
+        "q09",
+        "q10",
+        "q11",
+        "q12",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q21",
+        "q22",
+        "q24"
+      ]
+    },
+    "citation_metrics": {
+      "answered_questions_evaluated": 7,
+      "citation_accuracy_hits": 0,
+      "citation_accuracy_pct": 0.0,
+      "total_cited_markers": 2,
+      "invalid_citations_count": 0,
+      "invalid_citations_share_pct": 0.0
+    },
+    "correctness_judge_verdicts": {
+      "CORRECT": 15,
+      "CORRECT_pct": 44.12,
+      "PARTIAL": 0,
+      "PARTIAL_pct": 0.0,
+      "INCORRECT": 19,
+      "INCORRECT_pct": 55.88
+    },
+    "performance_metrics": {
+      "latency_p50_ms": 16198.3,
+      "latency_p95_ms": 293038.59,
+      "mean_input_tokens": 1279.3,
+      "mean_output_tokens": 42.4,
+      "mean_total_tokens": 1321.7,
+      "mean_llm_calls": 1.5
+    },
+    "needs_human_check": [
+      "q01",
+      "q02",
+      "q04",
+      "q05",
+      "q06",
+      "q08",
+      "q09",
+      "q10",
+      "q11",
+      "q12",
+      "q15",
+      "q16",
+      "q17",
+      "q18",
+      "q19",
+      "q20",
+      "q21",
+      "q22",
+      "q24",
+      "q34",
+      "q07",
+      "q03",
+      "q35",
+      "q23"
+    ]
+  },
+  "needs_human_check": [
+    "q01",
+    "q02",
+    "q04",
+    "q05",
+    "q06",
+    "q08",
+    "q09",
+    "q10",
+    "q11",
+    "q12",
+    "q15",
+    "q16",
+    "q17",
+    "q18",
+    "q19",
+    "q20",
+    "q21",
+    "q22",
+    "q24",
+    "q34",
+    "q07",
+    "q03",
+    "q35",
+    "q23"
+  ],
+  "results": [
+    {
+      "id": "q01",
+      "question": "Under the 2019 regulations, what is the minimum attendance requirement for students under IIT Jodhpur Academic Regulations?",
+      "answerable": true,
+      "expected_pages": [
+        7
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.8261,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the expected answer was clearly available in standard academic regulations.",
+      "tokens": {
+        "input_tokens": 1774,
+        "output_tokens": 28,
+        "total_tokens": 1802
+      },
+      "latency_ms": 49244.49
+    },
+    {
+      "id": "q02",
+      "question": "Under the 2019 regulations, what consequence does a student face if attendance drops below the 75% threshold without approved leave?",
+      "answerable": true,
+      "expected_pages": [
+        7
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6917,
+      "generated_answer": "Under the 2019 regulations (applicable to students enrolled from July 2019 onwards), students with attendance below the 75% threshold will still be allowed to appear for the exams, but they \"will be required to score at least C grade to pass a course.\" Furthermore, \"These students would be awarded F grade if their marks are lower than the cut-off for C grade in a course\" [Academic Regulations and Degree Requirements, p.7].",
+      "citations": [
+        {
+          "marker": "[Academic Regulations and Degree Requirements, p.7]",
+          "doc_title": "Academic Regulations and Degree Requirements",
+          "page": 7,
+          "chunk_id": "",
+          "applies_to": "Students enrolled from July 2019 onwards",
+          "file_date": "2019-09-03",
+          "formatted": "[Academic Regulations and Degree Requirements, p.7] | Date: 2019-09-03 | Applies to: Students enrolled from July 2019 onwards",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The generated answer contradicts the ground truth by stating students are allowed to appear and must score a C grade, whereas the ground truth states they receive an 'F' or are debarred.",
+      "tokens": {
+        "input_tokens": 1468,
+        "output_tokens": 178,
+        "total_tokens": 1646
+      },
+      "latency_ms": 16199.66
+    },
+    {
+      "id": "q03",
+      "question": "What is the minimum CGPA required for graduation in the M.Tech. program?",
+      "answerable": true,
+      "expected_pages": [
+        34
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.794,
+      "generated_answer": "For the M.Tech. program, the minimum CGPA requirement for graduation is 5.0.",
+      "citations": [],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately states the minimum CGPA required for M.Tech. graduation as 5.0.",
+      "tokens": {
+        "input_tokens": 2024,
+        "output_tokens": 54,
+        "total_tokens": 2078
+      },
+      "latency_ms": 15423.64
+    },
+    {
+      "id": "q04",
+      "question": "What is the maximum allowed duration to complete all undergraduate degree requirements?",
+      "answerable": true,
+      "expected_pages": [
+        17
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7667,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 1012,
+        "output_tokens": 9,
+        "total_tokens": 1021
+      },
+      "latency_ms": 7061.82
+    },
+    {
+      "id": "q05",
+      "question": "What are the passing letter grades and their associated numerical grade points in the grading system?",
+      "answerable": true,
+      "expected_pages": [
+        8
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6982,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information should be provided.",
+      "tokens": {
+        "input_tokens": 1199,
+        "output_tokens": 9,
+        "total_tokens": 1208
+      },
+      "latency_ms": 7537.9
+    },
+    {
+      "id": "q06",
+      "question": "How is the Semester Grade Point Average (SGPA) computed mathematically?",
+      "answerable": true,
+      "expected_pages": [
+        10
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.8312,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the question had a valid ground truth answer available.",
+      "tokens": {
+        "input_tokens": 1050,
+        "output_tokens": 9,
+        "total_tokens": 1059
+      },
+      "latency_ms": 18099.03
+    },
+    {
+      "id": "q07",
+      "question": "What academic criteria trigger academic probation or warning for students?",
+      "answerable": true,
+      "expected_pages": [
+        18
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6986,
+      "generated_answer": "Based on the provided document (Applies to: Students enrolled from July 2019 onwards), the criteria for academic probation and warnings are:\n\n* A student will be placed on academic probation from the third semester onward if they fail to earn a minimum of 12 credits in any registered semester.\n* A warning will be given (and intimation sent to parents) if a student earns less than or equal to 15 credits in any registered semester.\n* If a student remains on academic probation for two consecutive registered semesters, their registration will be terminated.",
+      "citations": [],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately captures the credit thresholds for academic probation and warning as stated in the ground truth.",
+      "tokens": {
+        "input_tokens": 2270,
+        "output_tokens": 251,
+        "total_tokens": 2521
+      },
+      "latency_ms": 16196.94
+    },
+    {
+      "id": "q08",
+      "question": "What is the procedure for reporting and approving medical leave?",
+      "answerable": true,
+      "expected_pages": [
+        9,
+        11,
+        21
+      ],
+      "expected_doc": "rules_ug_2019",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6607,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be available.",
+      "tokens": {
+        "input_tokens": 732,
+        "output_tokens": 9,
+        "total_tokens": 741
+      },
+      "latency_ms": 7664.52
+    },
+    {
+      "id": "q09",
+      "question": "What are the foundation mathematics and computing courses in the B.Tech AI & Data Science curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        10,
+        13
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7374,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 827,
+        "output_tokens": 9,
+        "total_tokens": 836
+      },
+      "latency_ms": 7391.32
+    },
+    {
+      "id": "q10",
+      "question": "What machine learning and artificial intelligence core courses are prescribed in the B.Tech AI & DS curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        10,
+        13
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 1.0,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information should be available.",
+      "tokens": {
+        "input_tokens": 907,
+        "output_tokens": 9,
+        "total_tokens": 916
+      },
+      "latency_ms": 8405.88
+    },
+    {
+      "id": "q11",
+      "question": "How many total credits are allocated to the B.Tech Project (BTP) in AI & Data Science?",
+      "answerable": true,
+      "expected_pages": [
+        8,
+        14
+      ],
+      "expected_doc": "curriculum_aids",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7798,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when an answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 830,
+        "output_tokens": 9,
+        "total_tokens": 839
+      },
+      "latency_ms": 7472.96
+    },
+    {
+      "id": "q12",
+      "question": "What are the core systems courses prescribed in the Systems Science curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "curriculum_systems_science",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 1.0,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 2227,
+        "output_tokens": 9,
+        "total_tokens": 2236
+      },
+      "latency_ms": 18425.09
+    },
+    {
+      "id": "q13",
+      "question": "Which course covers Lagrange's equations and Hamilton's equations of motion in the BS Physics curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        6,
+        26
+      ],
+      "expected_doc": "curriculum_physics",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7739,
+      "generated_answer": "The course that covers Lagrange's equations and Hamilton's equations of motion is titled \"Mechanics-I\" with the course number \"PHL2XXX\" (applies to BS Physics students, August 2023 onwards) [Undergraduate BS Physics Curriculum Framework, p.26].",
+      "citations": [
+        {
+          "marker": "[Undergraduate BS Physics Curriculum Framework, p.26]",
+          "doc_title": "Undergraduate BS Physics Curriculum Framework",
+          "page": 26,
+          "chunk_id": "",
+          "applies_to": "BS Physics students (August 2023 onwards)",
+          "file_date": "2023-08-03",
+          "formatted": "[Undergraduate BS Physics Curriculum Framework, p.26] | Date: 2023-08-03 | Applies to: BS Physics students (August 2023 onwards)",
+          "invalid_citation": false
+        }
+      ],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately identifies the course and code for Lagrange's and Hamilton's equations matching the ground truth.",
+      "tokens": {
+        "input_tokens": 2069,
+        "output_tokens": 108,
+        "total_tokens": 2177
+      },
+      "latency_ms": 26218.68
+    },
+    {
+      "id": "q14",
+      "question": "What are the core compulsory modules in the M.Tech Cyber-Physical Systems (CPS) curriculum?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "curriculum_mtech_cps",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7733,
+      "generated_answer": "Based on the curriculum for M.Tech CPS students (August 2025 onwards), the core compulsory courses are:\n\n- **I Semester:** \"Introduction to CyberPhysical Systems\" and \"Embedded System Design\"\n- **II Semester:** \"Data Communication and Networking\" and \"Advanced Control System\"\n- **III and IV Semesters:** \"Thesis\"",
+      "citations": [],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The generated answer accurately lists all the core compulsory modules for the M.Tech CPS curriculum.",
+      "tokens": {
+        "input_tokens": 1636,
+        "output_tokens": 219,
+        "total_tokens": 1855
+      },
+      "latency_ms": 107325.01
+    },
+    {
+      "id": "q15",
+      "question": "What is the minimum CGPA required to maintain financial assistance or teaching assistantship in postgraduate programs?",
+      "answerable": true,
+      "expected_pages": [
+        27
+      ],
+      "expected_doc": "rules_pg_2022",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7773,
+      "generated_answer": "Based on the regulations (applicable to students enrolled from July 2019 onwards), the minimum CGPA requirements for the continuation of Assistantship/Fellowship vary by program:\n\n* **M.Tech.:** 6.5\n* **Dual Degree (M.Tech. and Ph.D.):** 7.0\n* **Ph.D.:** 7.0",
+      "citations": [],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The generated CGPA values do not match the expected ground truth.",
+      "tokens": {
+        "input_tokens": 2100,
+        "output_tokens": 185,
+        "total_tokens": 2285
+      },
+      "latency_ms": 16245.65
+    },
+    {
+      "id": "q16",
+      "question": "What is the thesis submission and evaluation procedure for M.Tech students?",
+      "answerable": true,
+      "expected_pages": [
+        34,
+        35
+      ],
+      "expected_doc": "rules_pg_2022",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7218,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be available.",
+      "tokens": {
+        "input_tokens": 710,
+        "output_tokens": 9,
+        "total_tokens": 719
+      },
+      "latency_ms": 7125.52
+    },
+    {
+      "id": "q17",
+      "question": "What is the credit requirement for graduation in M.Sc. programs at IIT Jodhpur?",
+      "answerable": true,
+      "expected_pages": [
+        11,
+        18
+      ],
+      "expected_doc": "rules_msc",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7768,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained even though the answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 261,
+        "output_tokens": 9,
+        "total_tokens": 270
+      },
+      "latency_ms": 6589.62
+    },
+    {
+      "id": "q18",
+      "question": "When do classes commence for the Autumn Semester in Academic Year 2026-27 as per the Academic Calendar?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "academic_calendar_ay2026_27",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6839,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the correct answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 912,
+        "output_tokens": 9,
+        "total_tokens": 921
+      },
+      "latency_ms": 7599.59
+    },
+    {
+      "id": "q19",
+      "question": "When are the Mid-Semester and End-Semester examinations scheduled for Autumn 2026?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        6,
+        8
+      ],
+      "expected_doc": "academic_calendar_ay2026_27",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6676,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained when the expected answer was available in the ground truth.",
+      "tokens": {
+        "input_tokens": 361,
+        "output_tokens": 9,
+        "total_tokens": 370
+      },
+      "latency_ms": 17540.03
+    },
+    {
+      "id": "q20",
+      "question": "What is the duration and purpose of the Summer Term according to the Summer Term Academic Calendar?",
+      "answerable": true,
+      "expected_pages": [
+        1
+      ],
+      "expected_doc": "academic_calendar_summer2026",
+      "abstained": false,
+      "abstention_stage": null,
+      "abstention_reason": null,
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 1.0,
+      "generated_answer": "The Summer Term runs from the middle of May to the middle of July. Its purpose is to enable students to clear their backlog courses and/or regular credit courses, with courses offered provided a faculty member is available and upon approval of the Dean.",
+      "citations": [],
+      "citation_hit": false,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The generated answer provides incorrect dates and purpose compared to the official ground truth calendar.",
+      "tokens": {
+        "input_tokens": 2712,
+        "output_tokens": 106,
+        "total_tokens": 2818
+      },
+      "latency_ms": 37408.33
+    },
+    {
+      "id": "q21",
+      "question": "What are the statutory authorities of IIT Jodhpur defined in the First Statutes?",
+      "answerable": true,
+      "expected_pages": [
+        1,
+        4
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7439,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be available.",
+      "tokens": {
+        "input_tokens": 883,
+        "output_tokens": 9,
+        "total_tokens": 892
+      },
+      "latency_ms": 7456.86
+    },
+    {
+      "id": "q22",
+      "question": "What are the responsibilities and disciplinary powers of the Wardens of Hostels under the Statutes?",
+      "answerable": true,
+      "expected_pages": [
+        12
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 1.0,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained even though the answer was expected from the documents.",
+      "tokens": {
+        "input_tokens": 1126,
+        "output_tokens": 9,
+        "total_tokens": 1135
+      },
+      "latency_ms": 18928.22
+    },
+    {
+      "id": "q23",
+      "question": "What penalties can be imposed on students for indiscipline according to institute rules?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6954,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 784,
+        "output_tokens": 9,
+        "total_tokens": 793
+      },
+      "latency_ms": 6403.69
+    },
+    {
+      "id": "q24",
+      "question": "What constitutes the Senate and what is its primary jurisdiction at IIT Jodhpur?",
+      "answerable": true,
+      "expected_pages": [
+        2,
+        3
+      ],
+      "expected_doc": "statutes_code_of_conduct",
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.697,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "INCORRECT",
+      "judge_reason": "The model abstained from answering even though the information was expected to be provided.",
+      "tokens": {
+        "input_tokens": 753,
+        "output_tokens": 9,
+        "total_tokens": 762
+      },
+      "latency_ms": 15481.35
+    },
+    {
+      "id": "q25",
+      "question": "What is the fee refund policy for personal swimming pool passes at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6458,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information was not in the documents.",
+      "tokens": {
+        "input_tokens": 1116,
+        "output_tokens": 23,
+        "total_tokens": 1139
+      },
+      "latency_ms": 45055.99
+    },
+    {
+      "id": "q26",
+      "question": "What are the credit requirements for Stanford University's MS in Computer Science?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7214,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not in the IIT Jodhpur documents.",
+      "tokens": {
+        "input_tokens": 1073,
+        "output_tokens": 9,
+        "total_tokens": 1082
+      },
+      "latency_ms": 6344.71
+    },
+    {
+      "id": "q27",
+      "question": "What is the exact dinner menu for the IIT Jodhpur hostel mess on December 31, 2030?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6776,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 1806,
+        "output_tokens": 24,
+        "total_tokens": 1830
+      },
+      "latency_ms": 42041.99
+    },
+    {
+      "id": "q28",
+      "question": "What was the mid-term score of a student in Linear Algebra?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7373,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 2210,
+        "output_tokens": 34,
+        "total_tokens": 2244
+      },
+      "latency_ms": 278272.45
+    },
+    {
+      "id": "q33",
+      "question": "What is the annual hostel room rent and amenity fee charged to undergraduate students at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6929,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 1090,
+        "output_tokens": 9,
+        "total_tokens": 1099
+      },
+      "latency_ms": 1228552.48
+    },
+    {
+      "id": "q34",
+      "question": "What is the standard weekly breakfast and dinner schedule for the hostel dining mess?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.5962,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 1586,
+        "output_tokens": 26,
+        "total_tokens": 1612
+      },
+      "latency_ms": 320461.43
+    },
+    {
+      "id": "q35",
+      "question": "What was the highest and average CTC campus placement package for B.Tech in Artificial Intelligence & Data Science?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6843,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 829,
+        "output_tokens": 9,
+        "total_tokens": 838
+      },
+      "latency_ms": 185726.57
+    },
+    {
+      "id": "q36",
+      "question": "What is the monetary penalty fee for late submission of the B.Tech Project (BTP) report?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.6581,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 455,
+        "output_tokens": 9,
+        "total_tokens": 464
+      },
+      "latency_ms": 1446.35
+    },
+    {
+      "id": "q37",
+      "question": "How many days of paternity leave are granted to married postgraduate students at IIT Jodhpur?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7498,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 1837,
+        "output_tokens": 16,
+        "total_tokens": 1853
+      },
+      "latency_ms": 15801.26
+    },
+    {
+      "id": "q38",
+      "question": "What is the minimum qualifying score required for undergraduate students in the Hindi typing proficiency test?",
+      "answerable": false,
+      "expected_pages": [],
+      "expected_doc": null,
+      "abstained": true,
+      "abstention_stage": "verifier",
+      "abstention_reason": "answerer_abstained",
+      "model": "gemini-3.5-flash-lite",
+      "top_score": 0.7015,
+      "generated_answer": "I could not find this in the documents.",
+      "citations": [],
+      "citation_hit": null,
+      "invalid_citations_count": 0,
+      "judge_verdict": "CORRECT",
+      "judge_reason": "The model correctly abstained as the information is not present in the documents.",
+      "tokens": {
+        "input_tokens": 867,
+        "output_tokens": 9,
+        "total_tokens": 876
+      },
+      "latency_ms": 52041.49
+    }
+  ]
+}

@@ -57,3 +57,7 @@ eval/results/*cache*
 !eval/results/*.json
 eval/results/rag_cache.json
 eval/results/judge_cache.json
+eval/results/multi_agent_cache.json
+eval/results/multi_agent_v1_cache.json
+eval/results/multi_agent_*cache*.json
+

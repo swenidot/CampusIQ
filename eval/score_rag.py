@@ -13,6 +13,11 @@ import json
 import logging
 import math
 import os
+import sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 import random
 import time
 from typing import Any, Dict, List, Optional
@@ -21,7 +26,6 @@ from rag.generator import GeminiGenerator
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("campusiq.eval.score")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW_RESULTS_FILE = os.path.join(BASE_DIR, "eval", "results", "rag_baseline_raw.jsonl")
 QUESTIONS_FILE = os.path.join(BASE_DIR, "eval", "questions.jsonl")
 SCORED_RESULTS_FILE = os.path.join(BASE_DIR, "eval", "results", "rag_baseline_scored.json")
@@ -133,15 +137,28 @@ Generated Answer to Evaluate:
     return out
 
 
-def evaluate():
-    logger.info("Starting Phase 4 RAG Evaluation & Scoring...")
+def score_multi_agent(tag: str = "v1") -> Dict[str, Any]:
+    """Score multi-agent evaluation results for a given tag."""
+    raw_path = os.path.join(BASE_DIR, "eval", "results", f"multi_agent_{tag}_raw.jsonl")
+    scored_path = os.path.join(BASE_DIR, "eval", "results", f"multi_agent_{tag}_scored.json")
+    return evaluate(raw_file=raw_path, scored_file=scored_path, tag=tag)
+
+
+def evaluate(raw_file: Optional[str] = None, scored_file: Optional[str] = None, tag: Optional[str] = None):
+    if tag:
+        raw_path = raw_file or os.path.join(BASE_DIR, "eval", "results", f"multi_agent_{tag}_raw.jsonl")
+        scored_path = scored_file or os.path.join(BASE_DIR, "eval", "results", f"multi_agent_{tag}_scored.json")
+    else:
+        raw_path = raw_file or RAW_RESULTS_FILE
+        scored_path = scored_file or SCORED_RESULTS_FILE
+    logger.info(f"Starting RAG Evaluation & Scoring from {raw_path} -> {scored_path}...")
 
     # Load questions
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as f:
         q_map = {q["id"]: q for q in (json.loads(line) for line in f if line.strip())}
 
     # Load raw RAG results
-    with open(RAW_RESULTS_FILE, "r", encoding="utf-8") as f:
+    with open(raw_path, "r", encoding="utf-8") as f:
         raw_items = [json.loads(line) for line in f if line.strip()]
 
     logger.info(f"Loaded {len(raw_items)} raw results and {len(q_map)} ground truth questions.")
@@ -336,14 +353,20 @@ def evaluate():
         "results": scored_items,
     }
 
-    with open(SCORED_RESULTS_FILE, "w", encoding="utf-8") as f:
+    # Average LLM calls if available
+    llm_calls_list = [item.get("llm_calls", 1) for item in raw_items if "llm_calls" in item]
+    mean_llm_calls = sum(llm_calls_list) / len(llm_calls_list) if llm_calls_list else 1.0
+
+    summary_data["performance_metrics"]["mean_llm_calls"] = round(mean_llm_calls, 2)
+
+    with open(scored_path, "w", encoding="utf-8") as f:
         json.dump(output_payload, f, indent=2, ensure_ascii=False)
 
-    logger.info(f"Saved scored evaluation to {SCORED_RESULTS_FILE}")
+    logger.info(f"Saved scored evaluation to {scored_path}")
 
     # Print summary table to stdout
     print("\n" + "=" * 78)
-    print(f"{'CampusIQ Phase 4 RAG Baseline Scored Evaluation':^78}")
+    print(f"{'CampusIQ RAG Scored Evaluation':^78}")
     print("=" * 78)
     print(f"{'Metric':<46} | {'Value':<28}")
     print("-" * 78)
@@ -357,6 +380,7 @@ def evaluate():
     print(f"{'LLM Judge - CORRECT':<46} | {verdict_counts['CORRECT']}/{len(scored_items)} ({verdict_counts['CORRECT']/len(scored_items)*100:.1f}%)")
     print(f"{'LLM Judge - PARTIAL':<46} | {verdict_counts['PARTIAL']}/{len(scored_items)} ({verdict_counts['PARTIAL']/len(scored_items)*100:.1f}%)")
     print(f"{'LLM Judge - INCORRECT':<46} | {verdict_counts['INCORRECT']}/{len(scored_items)} ({verdict_counts['INCORRECT']/len(scored_items)*100:.1f}%)")
+    print(f"{'LLM Calls per Question (Mean)':<46} | {mean_llm_calls:.2f}")
     print(f"{'Latency p50 / p95 (ms)':<46} | {lat_p50:.1f} ms / {lat_p95:.1f} ms")
     print(f"{'Tokens per Request (Mean In / Out / Total)':<46} | {mean_in_tok:.1f} / {mean_out_tok:.1f} / {mean_tot_tok:.1f}")
     print(f"{'Needs Human Check Count':<46} | {len(needs_human_check)} questions")
@@ -366,4 +390,19 @@ def evaluate():
 
 
 if __name__ == "__main__":
-    evaluate()
+    import argparse
+    parser = argparse.ArgumentParser(description="CampusIQ RAG / Multi-Agent Evaluation Scorer")
+    parser.add_argument("--raw", type=str, default=None, help="Path to raw jsonl results")
+    parser.add_argument("--scored", type=str, default=None, help="Path to save scored json results")
+    parser.add_argument("--tag", type=str, default="v1", help="Tag for multi-agent results (default: v1)")
+    parser.add_argument("--multi-agent", action="store_true", help="Score multi-agent results using --tag")
+    args = parser.parse_args()
+
+    # Determine whether multi-agent scoring is requested
+    is_multi_agent = args.multi_agent or any(arg.startswith("--tag") for arg in sys.argv)
+    if is_multi_agent and args.raw is None:
+        tag = args.tag or "v1"
+        score_multi_agent(tag=tag)
+    else:
+        evaluate(raw_file=args.raw, scored_file=args.scored, tag=args.tag if args.tag != "v1" or is_multi_agent else None)
+
