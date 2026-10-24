@@ -27,12 +27,20 @@ class SessionState:
     citations: List[Dict[str, Any]] = field(default_factory=list)
     model: str = "gemini-3.5-flash-lite"
     tokens: Dict[str, int] = field(default_factory=lambda: {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0})
+    verification_path: Optional[str] = None  # "exact_normalized", "fuzzy", or "failed"
+    verification_paths: List[str] = field(default_factory=list)
+    compute_ms: float = 0.0
+    wall_clock_ms: float = 0.0
+    top_score: float = 0.0
 
     def add_chunk(self, chunk: Dict[str, Any]) -> None:
-        """Adds a chunk if not already present in chunks_seen (by chunk_id or doc_id+page)."""
-        cid = chunk.get("chunk_id") or f"{chunk.get('doc_id')}_{chunk.get('page')}_{chunk.get('title')}"
+        """Adds a chunk if not already present in chunks_seen."""
+        if not chunk.get("chunk_id") and chunk.get("doc_id") and chunk.get("page"):
+            chunk["chunk_id"] = f"{chunk.get('doc_id')}_{chunk.get('page')}"
+        text_snip = (chunk.get("text") or chunk.get("content") or "")[:40]
+        cid = chunk.get("chunk_id") or f"{chunk.get('doc_id')}_{chunk.get('page')}_{text_snip}"
         existing_ids = {
-            c.get("chunk_id") or f"{c.get('doc_id')}_{c.get('page')}_{c.get('title')}"
+            c.get("chunk_id") or f"{c.get('doc_id')}_{c.get('page')}_{(c.get('text') or c.get('content') or '')[:40]}"
             for c in self.chunks_seen
         }
         if cid not in existing_ids:

@@ -122,16 +122,19 @@ class MCPClient:
             if not content:
                 return []
 
-            text_content = content[0].get("text", "")
-            if not text_content:
-                return []
-
-            data = json.loads(text_content)
-            if isinstance(data, list):
-                return data
-            elif isinstance(data, dict):
-                return [data]
-            return []
+            items = []
+            for item in content:
+                text_content = item.get("text", "")
+                if text_content:
+                    try:
+                        data = json.loads(text_content)
+                        if isinstance(data, list):
+                            items.extend(data)
+                        elif isinstance(data, dict):
+                            items.append(data)
+                    except Exception:
+                        pass
+            return items
         except Exception as e:
             logger.error(f"MCP tool call {name} exception: {e}")
             return []
@@ -143,6 +146,21 @@ class MCPClient:
         clamped_k = max(1, min(10, k))
         return self._call_tool("search_documents", {"query": q, "k": clamped_k})
 
-    def get_chunk(self, doc_id: str, page: int) -> List[Dict[str, Any]]:
-        """Calls MCP get_chunk tool."""
+    def get_chunk(
+        self,
+        doc_id: Optional[str] = None,
+        page: Optional[int] = None,
+        chunk_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        """Calls MCP get_chunk tool by doc_id & page or chunk_id string."""
+        if chunk_id and (doc_id is None or page is None):
+            import re
+            m = re.match(r"^(.*)_p(\d+)(?:_c\d+)?$", chunk_id)
+            if m:
+                doc_id = m.group(1)
+                page = int(m.group(2))
+            else:
+                return []
+        if doc_id is None or page is None:
+            return []
         return self._call_tool("get_chunk", {"doc_id": doc_id, "page": page})

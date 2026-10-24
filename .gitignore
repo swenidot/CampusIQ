@@ -60,4 +60,9 @@ eval/results/judge_cache.json
 eval/results/multi_agent_cache.json
 eval/results/multi_agent_v1_cache.json
 eval/results/multi_agent_*cache*.json
-
+eval/results/multi_agent_v2_cache.json
+eval/results/*backup*
+eval/results/traces/
+eval/results/live_telemetry_n8.json
+eval/results/live_*.jsonl
+!docs/sample_trace.json

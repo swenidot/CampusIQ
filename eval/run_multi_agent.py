@@ -123,6 +123,10 @@ def run_benchmark(tag: str = DEFAULT_TAG):
             "tokens": tokens,
             "token_usage": tokens,
             "latency_ms": res.get("latency_ms"),
+            "wall_clock_ms": res.get("wall_clock_ms", res.get("latency_ms")),
+            "compute_ms": res.get("compute_ms", 0.0),
+            "verification_path": res.get("verification_path"),
+            "verification_paths": res.get("verification_paths", []),
             "llm_calls": res.get("llm_calls", 1),
             "tool_calls": res.get("tool_calls", 1),
             "cached": res.get("cached", False),
@@ -132,6 +136,7 @@ def run_benchmark(tag: str = DEFAULT_TAG):
         # Write incrementally to out_file so progress is never lost
         with open(out_file, "a", encoding="utf-8") as f_out:
             f_out.write(json.dumps(record, ensure_ascii=False) + "\n")
+            f_out.flush()
 
     # Overwrite complete file cleanly
     with open(out_file, "w", encoding="utf-8") as f_out:

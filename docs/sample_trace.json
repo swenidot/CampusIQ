@@ -1,0 +1,94 @@
+{
+  "trace_id": "a707fbbb0388d219793b9588ba342e6d",
+  "root_span": {
+    "name": "request",
+    "duration_ms": 3531.39,
+    "attributes": {
+      "question_id": "q12",
+      "mode": "multi_agent",
+      "model": "gemini-3.5-flash-lite",
+      "cache_hit": false,
+      "abstained": false,
+      "abstention_stage": "",
+      "verification_path": "exact_normalized",
+      "input_tokens": 5483,
+      "output_tokens": 1326,
+      "tool_calls": 3,
+      "num_chunks": 7
+    },
+    "children": [
+      {
+        "name": "tools/call search_documents",
+        "duration_ms": 44.88,
+        "attributes": {
+          "mcp.method.name": "tools/call",
+          "mcp.protocol.version": "2025-03-26",
+          "jsonrpc.request.id": "1",
+          "gen_ai.operation.name": "execute_tool",
+          "gen_ai.tool.name": "search_documents"
+        }
+      },
+      {
+        "name": "tools/call get_chunk",
+        "duration_ms": 2.62,
+        "attributes": {
+          "mcp.method.name": "tools/call",
+          "mcp.protocol.version": "2025-03-26",
+          "jsonrpc.request.id": "2",
+          "gen_ai.operation.name": "execute_tool",
+          "gen_ai.tool.name": "get_chunk"
+        }
+      },
+      {
+        "name": "adjacent_expansion",
+        "duration_ms": 11.82,
+        "attributes": {
+          "tool_name": "get_chunk",
+          "page": 3
+        }
+      },
+      {
+        "name": "tools/call get_chunk",
+        "duration_ms": 2.62,
+        "attributes": {
+          "mcp.method.name": "tools/call",
+          "mcp.protocol.version": "2025-03-26",
+          "jsonrpc.request.id": "3",
+          "gen_ai.operation.name": "execute_tool",
+          "gen_ai.tool.name": "get_chunk"
+        }
+      },
+      {
+        "name": "adjacent_expansion",
+        "duration_ms": 12.01,
+        "attributes": {
+          "tool_name": "get_chunk",
+          "page": 5
+        }
+      },
+      {
+        "name": "retrieval",
+        "duration_ms": 77.24,
+        "attributes": {
+          "tool_name": "search_documents",
+          "k": 5
+        }
+      },
+      {
+        "name": "generation",
+        "duration_ms": 3447.34,
+        "attributes": {
+          "model": "gemini-3.5-flash-lite",
+          "num_chunks": 7
+        }
+      },
+      {
+        "name": "verification",
+        "duration_ms": 3.09,
+        "attributes": {
+          "verification_path": ""
+        }
+      }
+    ]
+  }
+}

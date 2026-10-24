@@ -15,6 +15,8 @@ from agents.mcp_client import MCPClient
 from agents.session import SessionState
 from rag.generator import GeminiGenerator
 
+import time
+
 logger = logging.getLogger("campusiq.agents.retriever")
 
 RELEVANCE_THRESHOLD = 0.65
@@ -23,7 +25,8 @@ RELEVANCE_THRESHOLD = 0.65
 class RetrieverAgent:
     """
     Retriever agent calling MCP tools search_documents and get_chunk.
-    Reformulates queries when initial results lack sufficient relevance.
+    Implements baseline-first retrieval, unanswerable fast-exit,
+    deterministic top-2 adjacent-chunk expansion, and targeted retry with k=8.
     """
 
     def __init__(
@@ -47,37 +50,10 @@ class RetrieverAgent:
             ),
         )
 
-    def _assess_relevance(self, question: str, chunks: List[Dict[str, Any]]) -> bool:
-        """Determines if the retrieved chunks sufficiently cover the question."""
-        if not chunks:
-            return False
-
-        top_score = max((c.get("score", 0.0) for c in chunks), default=0.0)
-        if top_score < RELEVANCE_THRESHOLD:
-            return False
-
-        # Check keyword presence for key entities
-        q_lower = question.lower()
-        all_text = " ".join(c.get("text", "") for c in chunks).lower()
-
-        # Specific domain heuristics for known institutional concepts
-        if "attendance" in q_lower and "attendance" not in all_text:
-            return False
-        if "leave" in q_lower and "leave" not in all_text:
-            return False
-        if "cgpa" in q_lower and "cgpa" not in all_text and "grade point" not in all_text:
-            return False
-        if "probation" in q_lower and "probation" not in all_text:
-            return False
-        if "discipline" in q_lower and "discipline" not in all_text and "penalt" not in all_text:
-            return False
-
-        return True
-
     def _reformulate_query(self, session: SessionState, previous_chunks: List[Dict[str, Any]]) -> str:
         """Uses LLM to reformulate search query based on missing content."""
         chunks_summary = "\n".join(
-            f"[{c.get('title')}, p.{c.get('page')}] score={c.get('score', 0):.3f}: {c.get('text', '')[:120]}..."
+            f"[{c.get('title')}, p.{c.get('page')}] score={c.get('score', 0):.3f}: {(c.get('text') or c.get('content') or '')[:120]}..."
             for c in previous_chunks[:3]
         )
 
@@ -93,63 +69,122 @@ class RetrieverAgent:
             f"Output ONLY the new query string without quotes or explanations."
         )
 
+        t_llm_start = time.perf_counter()
         res = self.generator.generate(
             prompt=prompt,
             system_instruction="Output only the query text.",
             temperature=0.0,
         )
+        elapsed_ms = (time.perf_counter() - t_llm_start) * 1000
+        session.compute_ms += elapsed_ms
+
         session.llm_call_count += 1
         session.add_tokens(res.get("input_tokens", 0), res.get("output_tokens", 0))
 
         reformulated = res["text"].strip().strip('"\'')
         return reformulated if reformulated else session.question
 
-    def run(self, session: SessionState) -> List[Dict[str, Any]]:
+    def initial_retrieval(self, session: SessionState) -> List[Dict[str, Any]]:
         """
-        Executes retrieval with up to 2 reformulations and optional adjacent page lookup.
-        Appends chunks to session.chunks_seen.
+        Executes baseline-first retrieval:
+        1. Single direct search_documents call with k=5.
+        2. Fast-exit if top-1 score < 0.65 (unanswerable questions exit with 0 LLM calls).
+        3. Deterministic top-2 adjacent-chunk expansion via get_chunk.
+        4. Cap total chunks at 8.
         """
         current_query = session.question
         session.queries_tried.append(current_query)
 
-        # 1. Initial Search
+        # 1. Initial Search with k=5
+        t_mcp_start = time.perf_counter()
         initial_chunks = self.mcp_client.search_documents(current_query, k=5)
+        mcp_ms = (time.perf_counter() - t_mcp_start) * 1000
+        session.compute_ms += mcp_ms
         session.tool_call_count = self.mcp_client.call_count
+
+        if not initial_chunks:
+            session.abstained = True
+            session.abstention_stage = "stage_1_threshold"
+            session.abstention_reason = "threshold_abstention"
+            session.final_answer = "I could not find this in the documents."
+            return []
+
+        top_score = max((c.get("score", 0.0) for c in initial_chunks), default=0.0)
+        session.top_score = round(top_score, 4)
+
+        # 2. Fast-exit if below Stage-1 similarity threshold (0.65)
+        if top_score < RELEVANCE_THRESHOLD:
+            logger.info(f"Fast-exit threshold abstention (top_score={top_score:.4f} < {RELEVANCE_THRESHOLD})")
+            session.abstained = True
+            session.abstention_stage = "stage_1_threshold"
+            session.abstention_reason = "threshold_abstention"
+            session.final_answer = "I could not find this in the documents."
+            session.add_chunks(initial_chunks)
+            return initial_chunks
+
+        # Add initial chunks
         session.add_chunks(initial_chunks)
 
-        active_chunks = list(initial_chunks)
-
-        # 2. Check relevance and retry with reformulation up to 2 times
-        retries_remaining = 2
-        while retries_remaining > 0 and self.mcp_client.call_count < self.mcp_client.max_tool_calls:
-            if self._assess_relevance(session.question, active_chunks):
+        # 3. Deterministic Adjacent-Chunk Expansion for Top-2 Ranked Chunks
+        top_2_chunks = initial_chunks[:2]
+        for chunk in top_2_chunks:
+            if self.mcp_client.call_count >= self.mcp_client.max_tool_calls:
                 break
+            doc_id = chunk.get("doc_id")
+            page = chunk.get("page", 1)
+            if not doc_id:
+                continue
 
-            logger.info(f"Retriever reformulating query (attempts left: {retries_remaining}) for: {session.question}")
-            new_query = self._reformulate_query(session, active_chunks)
-            if new_query in session.queries_tried:
-                break
-
-            session.queries_tried.append(new_query)
-            new_chunks = self.mcp_client.search_documents(new_query, k=5)
-            session.tool_call_count = self.mcp_client.call_count
-            session.add_chunks(new_chunks)
-
-            # Update active chunks with highest scoring chunks
-            active_chunks = sorted(session.chunks_seen, key=lambda c: c.get("score", 0.0), reverse=True)
-            retries_remaining -= 1
-
-        # 3. Check for multi-page split chunk opportunities
-        # If top chunk is page 2 and tool calls < 5, inspect page 3 for split sections
-        if active_chunks and self.mcp_client.call_count < self.mcp_client.max_tool_calls:
-            top_chunk = active_chunks[0]
-            top_doc = top_chunk.get("doc_id")
-            top_page = top_chunk.get("page", 1)
-
-            # If top chunk looks relevant but may continue onto the next page
-            if top_chunk.get("score", 0.0) >= 0.70 and top_page in [2, 12]:
-                next_page_chunks = self.mcp_client.get_chunk(top_doc, top_page + 1)
+            # Fetch immediate continuation (next page)
+            from observability.tracing import trace_span
+            with trace_span("adjacent_expansion", {"tool_name": "get_chunk", "page": page + 1}):
+                t_adj_start = time.perf_counter()
+                next_page_chunks = self.mcp_client.get_chunk(doc_id=doc_id, page=page + 1)
+                adj_ms = (time.perf_counter() - t_adj_start) * 1000
+                session.compute_ms += adj_ms
                 session.tool_call_count = self.mcp_client.call_count
-                session.add_chunks(next_page_chunks)
+
+                if next_page_chunks:
+                    session.add_chunks(next_page_chunks)
+
+        # Cap total chunks passed to answerer at 8
+        if len(session.chunks_seen) > 8:
+            session.chunks_seen = session.chunks_seen[:8]
 
         return session.chunks_seen
+
+    def targeted_retry(self, session: SessionState) -> List[Dict[str, Any]]:
+        """
+        Executes targeted retry with one reformulated search (k=8).
+        Only invoked when initial retrieval had top-score >= 0.65 but answerer abstained.
+        """
+        if self.mcp_client.call_count >= self.mcp_client.max_tool_calls:
+            logger.warning("Targeted retry skipped: Hard cap of 5 tool calls reached.")
+            return session.chunks_seen
+
+        new_query = self._reformulate_query(session, session.chunks_seen)
+        if new_query in session.queries_tried:
+            logger.info("Targeted retry skipped: Reformulated query already tried.")
+            return session.chunks_seen
+
+        session.queries_tried.append(new_query)
+        logger.info(f"Targeted retry with query '{new_query}' (k=8)")
+
+        t_mcp_start = time.perf_counter()
+        new_chunks = self.mcp_client.search_documents(new_query, k=8)
+        mcp_ms = (time.perf_counter() - t_mcp_start) * 1000
+        session.compute_ms += mcp_ms
+        session.tool_call_count = self.mcp_client.call_count
+
+        if new_chunks:
+            session.add_chunks(new_chunks)
+
+        if len(session.chunks_seen) > 8:
+            session.chunks_seen = session.chunks_seen[:8]
+
+        return session.chunks_seen
+
+    def run(self, session: SessionState) -> List[Dict[str, Any]]:
+        """Standard entry point for initial retrieval."""
+        return self.initial_retrieval(session)
+

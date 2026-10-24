@@ -1,0 +1,45 @@
+{
+  "sample_size": 8,
+  "questions": [
+    "q03",
+    "q04",
+    "q07",
+    "q12",
+    "q25",
+    "q27",
+    "q28",
+    "q34"
+  ],
+  "stage_stats": {
+    "retrieval": {
+      "count": 16,
+      "p50": 37.77,
+      "p95": 4500.44,
+      "mean": 1139.7
+    },
+    "adjacent_expansion": {
+      "count": 8,
+      "p50": 15.45,
+      "p95": 59.39,
+      "mean": 23.72
+    },
+    "generation": {
+      "count": 8,
+      "p50": 1150.19,
+      "p95": 2758.45,
+      "mean": 1446.27
+    },
+    "verification": {
+      "count": 4,
+      "p50": 6.48,
+      "p95": 7.67,
+      "mean": 5.96
+    },
+    "retry": {
+      "count": 0,
+      "p50": 0.0,
+      "p95": 0.0,
+      "mean": 0.0
+    }
+  }
+}

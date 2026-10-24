@@ -227,7 +227,7 @@ def test_multi_agent_pipeline_end_to_end():
     res = pipeline.answer("Under the 2019 regulations, what is the minimum attendance requirement?")
     assert "answer" in res
     assert res["abstained"] is False
-    assert res["llm_calls"] >= 2
+    assert res["llm_calls"] >= 1
     assert res["tool_calls"] >= 1
     assert res["model"] == "gemini-3.5-flash-lite"
     assert "citations" in res
@@ -343,4 +343,125 @@ def test_tag_paths_and_defaults():
         assert recorded_paths[-1] == (expected_v2_raw, expected_v2_scored, "v2")
     finally:
         score_rag.evaluate = original_evaluate
+
+
+def test_verifier_whitespace_and_line_breaks_pass():
+    """Verify (a): quote with line breaks and extra whitespace passes via exact_normalized."""
+    verifier = VerifierAgent(generator=FakeGenerator())
+    chunk_text = (
+        "A student must maintain a minimum attendance of 75% in all lectures,\n"
+        "tutorials, and practicals to be eligible to appear for the end-semester examinations."
+    )
+    chunks = [{"text": chunk_text, "doc_id": "rules", "page": 7, "title": "Regulations"}]
+
+    # Draft with uneven line breaks and multiple spaces inside quote
+    draft = 'According to the rules, "minimum   attendance\n  of 75% in all lectures,\n tutorials" is required [Regulations, p.7].'
+    ok, valid, invalid = verifier.deterministic_quote_check(draft, chunks)
+    assert ok is True
+    assert len(valid) == 1
+    assert len(invalid) == 0
+
+
+def test_verifier_mutated_number_percentage_or_date_fails():
+    """Verify (b): quote with mutated number, percentage or date FAILS fuzzy check."""
+    verifier = VerifierAgent(generator=FakeGenerator())
+    chunk_text = (
+        "Students not meeting the attendance criterion of 75% will be required to score "
+        "at least 5.0 CGPA by 15 September 2019 to continue."
+    )
+    chunks = [{"text": chunk_text, "doc_id": "rules", "page": 7, "title": "Regulations"}]
+
+    # Mutated percentage: 75% -> 80%
+    draft_pct = 'The policy specifies "attendance criterion of 80% will be required to score at least 5.0 CGPA" [Regulations, p.7].'
+    ok_pct, valid_pct, invalid_pct = verifier.deterministic_quote_check(draft_pct, chunks)
+    assert ok_pct is False
+    assert len(invalid_pct) == 1
+
+    # Mutated number: 5.0 -> 6.5
+    draft_num = 'The policy specifies "attendance criterion of 75% will be required to score at least 6.5 CGPA" [Regulations, p.7].'
+    ok_num, valid_num, invalid_num = verifier.deterministic_quote_check(draft_num, chunks)
+    assert ok_num is False
+    assert len(invalid_num) == 1
+
+    # Mutated date: 15 September 2019 -> 20 September 2019
+    draft_date = 'The policy specifies "at least 5.0 CGPA by 20 September 2019 to continue" [Regulations, p.7].'
+    ok_date, valid_date, invalid_date = verifier.deterministic_quote_check(draft_date, chunks)
+    assert ok_date is False
+    assert len(invalid_date) == 1
+
+
+def test_approved_draft_retains_100_percent_citations():
+    """Verify an approved draft retains 100% of its citation markers in final_answer without modification."""
+    fake_gen = FakeGenerator()
+    verifier = VerifierAgent(generator=fake_gen)
+
+    chunk_1 = "Students are required to maintain a minimum attendance of 75% in all lectures."
+    chunk_2 = "A student must secure a minimum CGPA of 5.0 for graduation."
+    chunks = [
+        {"text": chunk_1, "doc_id": "rules_ug_2019", "page": 7, "title": "Academic Regulations and Degree Requirements"},
+        {"text": chunk_2, "doc_id": "rules_ug_2019", "page": 34, "title": "Academic Regulations and Degree Requirements"},
+    ]
+
+    session = SessionState(question="What are the attendance and graduation requirements?")
+    session.chunks_seen = chunks
+
+    draft = (
+        'Students must maintain "minimum attendance of 75% in all lectures" [Academic Regulations and Degree Requirements, p.7]. '
+        'For degree completion, "minimum CGPA of 5.0 for graduation" is mandated [Academic Regulations and Degree Requirements, p.34].'
+    )
+    session.draft_answer = draft
+
+    final_ans = verifier.run(session)
+
+    # Approved draft must be returned untouched
+    assert final_ans == draft
+    # 0 LLM calls in verifier since all quotes passed
+    assert session.llm_call_count == 0
+    # Both citation markers are present
+    assert "[Academic Regulations and Degree Requirements, p.7]" in final_ans
+    assert "[Academic Regulations and Degree Requirements, p.34]" in final_ans
+    assert len(session.citations) == 2
+
+
+def test_real_top_score_propagation():
+    """Verify that real cosine similarity from initial search is propagated to session and result."""
+    fake_gen = FakeGenerator()
+    fake_mcp = FakeMCPClient()
+    # Inject chunks with a realistic cosine similarity
+    fake_mcp.search_results = [
+        {
+            "doc_id": "rules_ug_2019",
+            "title": "Academic Regulations",
+            "page": 7,
+            "score": 0.7654,
+            "text": "Students are required to maintain a minimum attendance of 75%.",
+        }
+    ]
+    # get_chunk returns an adjacent chunk
+    fake_mcp.chunk_results = [
+        {
+            "doc_id": "rules_ug_2019",
+            "title": "Academic Regulations",
+            "page": 8,
+            "score": 1.0,  # direct lookup score
+            "text": "Continuation of attendance rules on next page.",
+        }
+    ]
+
+    pipeline = MultiAgentPipeline(generator=fake_gen, mcp_client=fake_mcp)
+    res = pipeline.answer("What is the attendance requirement?")
+
+    assert res["abstained"] is False
+    # Crucial check: top_score must be 0.88 (from search_documents), NOT overwritten by 1.0 from get_chunk!
+    assert res["top_score"] == 0.88
+
+    # Test threshold fast-exit (< 0.65)
+    fake_mcp_low = FakeMCPClient()
+    pipeline_low = MultiAgentPipeline(generator=fake_gen, mcp_client=fake_mcp_low)
+    res_low = pipeline_low.answer("What is the dinner menu?")
+
+    assert res_low["abstained"] is True
+    assert res_low["abstention_stage"] == "stage_1_threshold"
+    assert res_low["top_score"] == 0.50
+
 

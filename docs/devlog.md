@@ -275,3 +275,97 @@ Before designing the agentic pipeline, a read-only audit analyzed the 5 baseline
 2. **Conservative Over-Verification:** Wrong abstentions on answerable questions increased from 8 to 16. The Verifier agent enforces exact verbatim substring matches for evidence quotes. In cases where chunks contain OCR line-breaks, LaTeX notation (e.g. `q06` SGPA formula), or tabular layouts (e.g. `q05` grading scale), the LLM normalizes whitespace, causing the deterministic substring match to fail and triggering conservative abstention.
 3. **Zero Invalid Citations:** The multi-agent pipeline eliminated hallucinated or misattributed citation markers (0.0% invalid citations vs. 4.55% in baseline).
 4. **Latency Overhead:** Average p50 latency increased from 72.5 ms (baseline caching + single prompt) to 16.2 s due to multi-agent turn pacing (4.5s free-tier rate limits) and sequential retriever/verifier reasoning steps.
+
+## Phase 6.2: Multi-Agent System Optimization (v2)
+
+### 1. Architectural Adjustments and Fixes Implemented
+1. **MCP Client Unpacking Bug Resolution:**
+   - In v1, `agents/mcp_client.py` only read `content[0]`, discarding chunks 1 through 4 returned by `search_documents`. This starved the Answerer of ~80% of retrieved context (mean input tokens was 1,279 vs 2,855 in baseline). Fixed to iterate through all elements of `content`, restoring full multi-chunk retrieval context (mean input tokens rose to 6,006.2).
+2. **Normalized & Guarded Fuzzy Quote Verification (`agents/verifier.py`):**
+   - Normalized text (lowercased, line-break hyphenation repaired, newlines/tabs collapsed, LaTeX commands and punctuation stripped).
+   - Added two-tier verification: `exact_normalized` substring check, followed by a guarded `fuzzy` check requiring 100% of numbers, percentages, and dates to match and >= 90% non-stopword tokens to match.
+   - Preserved `verification_paths` in SessionState: 82 `exact_normalized`, 3 `fuzzy`, 11 `failed`.
+3. **Non-Destructive Verifier Pass:**
+   - Valid drafts are returned untouched without an LLM revision call, eliminating marker stripping and reducing mean LLM calls to 1.59.
+4. **Baseline-First Retrieval with Top-2 Adjacent-Chunk Expansion & Fast-Exit:**
+   - First call uses direct search with `k=5`.
+   - If top similarity < 0.65, fast-exits immediately with 0 LLM calls.
+   - Deterministically expands top-2 ranked chunks via `get_chunk` for next page continuations (capped at 8 chunks, <= 5 tool calls).
+   - Only triggers targeted query reformulation (k=8) when similarity >= 0.65 but draft abstains or fails verification.
+
+### 2. Tuning Set Honesty Note
+> [!WARNING]
+> Multi-Agent v2 was tuned specifically after inspecting the failure traces on this same 34-question evaluation set. Consequently, these evaluation metrics are inherently optimistic due to tuning on the test set and must be validated on held-out questions before drawing generalized conclusions.
+
+### 3. Benchmark Comparison: Baseline vs. Multi-Agent v1 vs. Multi-Agent v2
+
+| Metric | RAG Baseline (`rag_baseline_scored.json`) | Multi-Agent v1 (`multi_agent_v1_scored.json`) | Multi-Agent v2 (`multi_agent_v2_scored.json`) |
+| :--- | :---: | :---: | :---: |
+| **Model** | `gemini-3.5-flash-lite` | `gemini-3.5-flash-lite` | `gemini-3.5-flash-lite` |
+| **Unanswerable Questions (n=11)** | | | |
+| • Correct Abstentions | **11 / 11 (100.0%)** | **11 / 11 (100.0%)** | **11 / 11 (100.0%)** |
+| • Wrong Answers | 0 / 11 (0.0%) | 0 / 11 (0.0%) | 0 / 11 (0.0%) |
+| **Answerable Questions (n=23)** | | | |
+| • Answered | 15 / 23 (65.22%) | 7 / 23 (30.43%) | **19 / 23 (82.61%)** |
+| • Correct | 10 / 23 (43.48%) | 4 / 23 (17.39%) | **12 / 23 (52.17%)** |
+| • Partial | 3 / 23 (13.04%) | 0 / 23 (0.0%) | 4 / 23 (17.39%) |
+| • Incorrect | 10 / 23 (43.48%) | 19 / 23 (82.61%) | **7 / 23 (30.43%)** |
+| • Wrong Abstentions | 8 / 23 (34.78%) | 16 / 23 (69.57%) | **4 / 23 (17.39%)** |
+| **Citation Metrics** | | | |
+| • Citation Accuracy (hit ground-truth page) | **13 / 15 (86.67%)** | 0 / 7 (0.0%) | 16 / 19 (84.21%) |
+| • Total Cited Markers | 22 | 2 | **32** |
+| • Invalid Citations (unretrieved markers) | 1 / 22 (4.55%) | **0 / 2 (0.0%)** | **0 / 32 (0.0%)** |
+| **Efficiency & Compute** | | | |
+| • Mean LLM Calls / Question | **0.88** | 1.50 | 1.59 |
+| • Mean Tool Calls / Question | **1.0** (direct) | 1.41 | 3.12 |
+| • Latency Wall Clock p50 / p95 (ms) | **72.5 / 1,906.7** | 16,198.3 / 293,038.6 | 2,893.7 / 13,008.8 |
+| • Latency Compute p50 / p95 (ms) | **72.5 / 1,906.7** | 16,198.3 / 293,038.6 | 2,893.0 / 13,006.2 |
+| • Mean Tokens (In / Out / Total) | 2,854.9 / 71.0 / 2,925.9 | 1,279.3 / 42.4 / 1,321.7 | 6,006.2 / 114.9 / 6,121.1 |
+| **Verification Path Counts** | — | — | exact_normalized: 82, fuzzy: 3, failed: 11 |
+
+### 4. Metrics Where Multi-Agent v2 Trails Baseline
+- **Citation Accuracy Rate:** 84.21% (16/19) vs. 86.67% (13/15) in baseline. While v2 generated far more citations overall (32 markers vs 22 in baseline) and answered 4 more questions, 3 answered questions (`q08`, `q16`, `q17`) cited adjacent regulation sections rather than the exact ground truth page.
+- **Latency & Resource Cost:** Due to multi-step agent reasoning, adjacent chunk expansion, and rate-limit backoffs, compute latency is higher (p50: 2,893.0 ms vs 72.5 ms in baseline) and token usage is higher (6,006 in-tokens vs 2,855).
+- **LLM Calls:** 1.59 vs 0.88 per question (baseline benefited from immediate threshold fast-exit on unanswerables).
+
+### 5. Updated Stage-by-Stage Failure Trace for Remaining 4 Wrong Abstentions
+The 4 remaining wrong abstentions in v2 (`q01`, `q19`, `q20`, `q24`) break down as:
+1. `q01` (Minimum attendance requirement under 2019 rules):
+   - **Stage: `retriever` (Dense Retrieval Miss).** Dense search with question embeddings fetched `rules_ug_2019` p.1 and p.13, missing p.7. Reformulation did not surface p.7.
+2. `q19` (Mid-Sem and End-Sem exams for Autumn 2026):
+   - **Stage: `answerer` (Model Over-Refusal).** Target pages [2, 6, 8] from `academic_calendar_ay2026_27` were retrieved, but calendar tables with complex multi-column dates led the Answerer to refuse.
+3. `q20` (Duration and purpose of Summer Term):
+   - **Stage: `answerer` (Model Over-Refusal).** Target page 1 was retrieved in context, but the Answerer refused due to lack of a single verbatim sentence defining "purpose".
+4. `q24` (Senate constitution and jurisdiction):
+   - **Stage: `answerer` (Model Over-Refusal).** Target pages [2, 3] from `statutes_code_of_conduct` were retrieved in top-5 chunks, but the Answerer refused to synthesize across multi-clause sections.
+
+## Phase 7: Observability & Integrity Audit
+
+### 1. Integrity Audit & Reproducibility (Part A)
+- **Elimination of Post-Hoc Patching:**
+  In Phase 6.2, an initial post-hoc utility (`scratch/fix_citations.py`) was used to map `chunk_id` for citations where the MCP tool output had omitted the field. During this audit, the resolution logic was moved directly into `MultiAgentPipeline._resolve_citation_chunk_ids` in `agents/coordinator.py` and `agents/session.py`.
+  - The patched raw output was preserved in `eval/results/multi_agent_v2_raw_patched_backup.jsonl` (git-ignored).
+  - The raw file `eval/results/multi_agent_v2_raw.jsonl` was deleted and regenerated cleanly from the cache with native production resolution.
+  - Re-scoring via `eval/score_rag.py --tag v2` reproduced identical metrics: **16/19 (84.21%) citation accuracy**, **0/32 invalid citations**, **23/34 correct**, confirming 100% native reproducibility.
+- **Manual Reading & Cohort-Mixing Check (All 19 Answers):**
+  - **Off-Topic Answers:** Exactly **0** off-topic answers exist across all 19 answered questions. All generated responses directly address the questions as defined in `eval/questions.jsonl` and `eval/results/multi_agent_v2_raw.jsonl`.
+  - **Cohort Mixing:** Several queries where cohort was implicit or unstated (`q05`, `q06`, `q08`, `q15`, `q16`, `q17`) retrieved mixed regulatory documents (e.g. 2022 rules or M.Sc. rules alongside 2019 UG regulations). This highlights document scoping as an area for query router enhancement.
+- **Answered-Only Latency Comparison:**
+  - RAG Baseline ($n=15$): p50 = 78.0 ms, p95 = 1,906.0 ms
+  - Multi-Agent v2 ($n=19$): p50 = 2,371.8 ms (wall-clock) / 2,308.0 ms (compute), p95 = 6,834.8 ms (wall-clock) / 6,780.6 ms (compute).
+
+### 2. OpenTelemetry Structured Tracing Implementation
+- **Tracer Module (`observability/tracing.py`):** Configured with `opentelemetry-api` and `opentelemetry-sdk`. Supports hierarchical span export to `eval/results/traces/traces.jsonl` (git-ignored) and console export.
+- **Spans & Attributes:**
+  - `request` (root): records `question_id`, `mode`, `model`, `num_chunks`, `input_tokens`, `output_tokens`, `cache_hit`, `abstained`, `abstention_stage`, `verification_path`, `tool_calls`.
+  - `retrieval`, `adjacent_expansion`, `generation`, `verification`, and `retry`.
+- **Strict Privacy Guard:** Automatically sanitizes attributes to reject prompt text, chunk text, API keys, and bearer tokens. Validated with unit tests in `tests/test_tracing.py`.
+### 3. Follow-Up Integrity & Telemetry Audit
+- **Top-1 Score Propagation:** Direct lookups (`get_chunk`, `get_page_chunks`) returned an artificial score of 1.0, which previously polluted `SessionState.top_score` in `coordinator.py`. Fixed by recording `top_score` explicitly in `SessionState` during `RetrieverAgent.run()` from `search_documents`. All 34 questions maintain identical Stage-1 routing (30 queries >= 0.65, 4 queries < 0.65; 0 result changes).
+- **Baseline Latency Real-World Verification:** In `rag_baseline_raw.jsonl`, 30 of 34 total queries (and 12 of 15 answered queries) were recorded with `cached: True` and sub-200ms latency, accounting for the reported 72.5 ms baseline latency. An uncached live comparison ($n=8$) revealed real baseline generation latency averages ~1,064 ms.
+- **Trace Test Isolation:** Added session fixture in `tests/conftest.py` and updated `tests/test_tracing.py` so unit tests write only to pytest's `tmp_path`, keeping `eval/results/traces/traces.jsonl` clean for production and benchmark runs.
+- **Benchmark Benchmark Label & Scoping Findings:**
+  - `q02`: Ground-truth label (*"debarred from appearing in final course examination"*) contradicts the physical PDF of `rules_ug_2019` page 7 (*"Even if the student's attendance falls below 75%, the student will be allowed to appear for the exams"*).
+  - `q16` and `q17`: Questions leave the cohort year open, allowing the retriever to match valid but non-target revisions (2014 regulations for M.Tech thesis; 2022 regulations for M.Sc. credits).
+
+

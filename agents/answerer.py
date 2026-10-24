@@ -11,6 +11,8 @@ from google.adk import Agent
 from agents.session import SessionState
 from rag.generator import GeminiGenerator
 
+import time
+
 logger = logging.getLogger("campusiq.agents.answerer")
 
 ABSTENTION_ANSWER = "I could not find this in the documents."
@@ -19,12 +21,14 @@ ANSWERER_SYSTEM_PROMPT = """You are the CampusIQ Grounded Answer Agent for IIT J
 Answer the question using ONLY the provided document excerpts.
 
 Strict Requirements:
-1. Every factual statement or claim MUST be immediately supported by a short verbatim quote (under 15 words in double quotes) taken directly from the excerpt text, followed by its source marker [Title, p.X].
+1. Every factual statement or claim MUST be immediately supported by a short supporting quote or snippet (under 15 words in double quotes) taken directly from the excerpt text, followed by its source marker [Title, p.X].
    Example: Under the regulations, "minimum attendance of 75% in all lectures" is required [Academic Regulations, p.7].
-2. Do NOT extrapolate, speculate, or introduce any external knowledge.
-3. If the provided excerpts do not directly state the answer to the question, you MUST respond with EXACTLY:
+2. For tables, grading scales, curriculum lists, formulas, or examination schedules: quote the specific cell, row, course code, grade point, or formula variables from the excerpt (e.g., "A* Outstanding 10", "Mechanics-I [3-0-0]", "14 registered semesters", "SGPA = sum(Ci*Gi)/sum(Ci)") and state the facts explicitly shown in the excerpt instead of abstaining.
+3. If an excerpt partially answers the question or provides relevant rules for a specific cohort, answer with the facts provided. Mention the applicable cohort if stated.
+4. Do NOT extrapolate, speculate, or introduce external knowledge.
+5. ONLY if the provided excerpts are genuinely unrelated or provide no relevant facts to answer the question, output EXACTLY:
 I could not find this in the documents.
-4. Keep the answer direct, factual, and concise."""
+6. Keep the answer direct, factual, and concise."""
 
 
 class AnswererAgent:
@@ -50,7 +54,7 @@ class AnswererAgent:
     def run(self, session: SessionState) -> str:
         """
         Produces draft answer from session.chunks_seen.
-        Updates session.draft_answer and token counts.
+        Updates session.draft_answer, token counts, and compute_ms.
         """
         if not session.chunks_seen:
             session.draft_answer = ABSTENTION_ANSWER
@@ -71,11 +75,14 @@ class AnswererAgent:
         context_str = "\n".join(context_parts)
         prompt = f"DOCUMENT EXCERPTS:\n{context_str}\n\nQUESTION: {session.question}\n\nDRAFT ANSWER:"
 
+        t_start = time.perf_counter()
         res = self.generator.generate(
             prompt=prompt,
             system_instruction=ANSWERER_SYSTEM_PROMPT,
             temperature=0.0,
         )
+        elapsed_ms = (time.perf_counter() - t_start) * 1000
+        session.compute_ms += elapsed_ms
 
         session.llm_call_count += 1
         session.add_tokens(res.get("input_tokens", 0), res.get("output_tokens", 0))
